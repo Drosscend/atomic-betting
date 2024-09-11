@@ -1,4 +1,4 @@
-import { Trophy, Users, Zap } from "lucide-react";
+import { TrophyIcon, UsersIcon, ZapIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function Features() {
@@ -9,7 +9,7 @@ export function Features() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
           <Card>
             <CardHeader>
-              <Users className="mb-2 size-8" />
+              <UsersIcon className="mb-2 size-8" />
               <CardTitle>{"Équipes privées"}</CardTitle>
             </CardHeader>
             <CardContent>
@@ -18,7 +18,7 @@ export function Features() {
           </Card>
           <Card>
             <CardHeader>
-              <Zap className="mb-2 size-8" />
+              <ZapIcon className="mb-2 size-8" />
               <CardTitle>{"Paris personnalisés"}</CardTitle>
             </CardHeader>
             <CardContent>
@@ -27,7 +27,7 @@ export function Features() {
           </Card>
           <Card className="sm:col-span-2 lg:col-span-1">
             <CardHeader>
-              <Trophy className="mb-2 size-8" />
+              <TrophyIcon className="mb-2 size-8" />
               <CardTitle>{"Atomic Credits"}</CardTitle>
             </CardHeader>
             <CardContent>
