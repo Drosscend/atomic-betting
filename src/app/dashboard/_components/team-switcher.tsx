@@ -6,6 +6,7 @@ import { TeamJoinForm } from "@/app/dashboard/_components/team-join-form";
 import { TeamSheet } from "@/app/dashboard/_components/team-sheet";
 import { CaretSortIcon, CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 import { useMediaQuery } from "@uidotdev/usehooks";
+import Link from "next/link";
 import * as React from "react";
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -18,8 +19,8 @@ const groups = [
   {
     label: "Mes équipes",
     teams: [
-      { label: "Acme Inc.", value: "acme-inc" },
-      { label: "Monsters Inc.", value: "monsters" },
+      { label: "M1 ICE", value: "e920f20c-2dfc-4239-9cb2-5db42682e143" },
+      { label: "M2 ICE", value: "15c93707-69f6-4607-a115-dbfc3b3dacef" },
     ],
   },
 ];
@@ -42,8 +43,8 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
 
   const NewTeamContent = (
     <>
-      <h2>Créer une équipe</h2>
-      <p>Ajoutez une nouvelle équipe pour commencer vos paris</p>
+      <h2>{"Créer une équipe"}</h2>
+      <p>{"Ajoutez une nouvelle équipe pour commencer vos paris"}</p>
       <TeamCreationForm onSubmit={handleNewTeamSubmit} />
     </>
   );
@@ -55,8 +56,8 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
 
   const JoinTeamContent = (
     <>
-      <h2>Rejoindre une équipe</h2>
-      <p>Entrez l'identifiant de l'équipe pour la rejoindre</p>
+      <h2>{"Rejoindre une équipe"}</h2>
+      <p>{"Entrez l'identifiant de l'équipe pour la rejoindre"}</p>
       <TeamJoinForm onSubmit={handleJoinTeamSubmit} />
     </>
   );
@@ -84,25 +85,26 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
           <Command>
             <CommandInput placeholder="Chercher une équipe" />
             <CommandList>
-              <CommandEmpty>Pas d'équipe trouvée</CommandEmpty>
+              <CommandEmpty>{"Pas d'équipe trouvée"}</CommandEmpty>
               {groups.map((group) => (
                 <CommandGroup key={group.label} heading={group.label}>
                   {group.teams.map((team) => (
-                    <CommandItem
-                      key={team.value}
-                      onSelect={() => {
-                        setSelectedTeam(team);
-                        setOpen(false);
-                      }}
-                      className="text-sm"
-                    >
-                      <Avatar className="mr-2 size-5">
-                        <AvatarImage src={`https://avatar.vercel.sh/${team.value}.png`} alt={team.label} className="grayscale" />
-                        <AvatarFallback>SC</AvatarFallback>
-                      </Avatar>
-                      {team.label}
-                      <CheckIcon className={cn("ml-auto size-4", selectedTeam.value === team.value ? "opacity-100" : "opacity-0")} />
-                    </CommandItem>
+                    <Link href={`/dashboard/${team.value}`} key={team.value} passHref>
+                      <CommandItem
+                        onSelect={() => {
+                          setSelectedTeam(team);
+                          setOpen(false);
+                        }}
+                        className="text-sm"
+                      >
+                        <Avatar className="mr-2 size-5">
+                          <AvatarImage src={`https://avatar.vercel.sh/${team.value}.png`} alt={team.label} className="grayscale" />
+                          <AvatarFallback>SC</AvatarFallback>
+                        </Avatar>
+                        {team.label}
+                        <CheckIcon className={cn("ml-auto size-4", selectedTeam.value === team.value ? "opacity-100" : "opacity-0")} />
+                      </CommandItem>
+                    </Link>
                   ))}
                 </CommandGroup>
               ))}
@@ -119,10 +121,6 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
                   <PlusCircledIcon className="mr-2 size-5" />
                   Créer une équipe
                 </CommandItem>
-              </CommandGroup>
-            </CommandList>
-            <CommandList>
-              <CommandGroup>
                 <CommandItem
                   onSelect={() => {
                     setOpen(false);
