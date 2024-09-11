@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { format, formatDistance } from "date-fns";
+import { fr } from "date-fns/locale";
 import { IncrementNumber } from "@/components/increment-number";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -40,24 +41,16 @@ const bets: Bet[] = [
 ];
 
 export function CurrentBet() {
-  const calculateTimeLeft = (endDate: string) => {
-    const difference = +new Date(endDate) - +new Date();
-    let timeLeft = {};
+  const formatTimeLeft = (endDate: string) => {
+    const now = new Date();
+    const end = new Date(endDate);
 
-    if (difference > 0) {
-      timeLeft = {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-      };
-    }
+    if (now > end) return "Expiré";
 
-    return timeLeft;
-  };
-
-  const formatTimeLeft = (timeLeft: any) => {
-    if (Object.keys(timeLeft).length === 0) return "Expiré";
-    return `${timeLeft.days}j ${timeLeft.hours}h ${timeLeft.minutes}m`;
+    return formatDistance(end, now, {
+      locale: fr,
+      addSuffix: true,
+    });
   };
 
   if (bets.length === 0) {
@@ -81,20 +74,19 @@ export function CurrentBet() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm font-medium">Date de début</p>
-                <p className="text-muted-foreground text-sm">{new Date(bet.startDate).toLocaleDateString()}</p>
+                <p className="text-muted-foreground text-sm">{format(new Date(bet.startDate), "dd MMMM yyyy à H:mm", { locale: fr })}</p>{" "}
               </div>
               <div>
                 <p className="text-sm font-medium">Date de fin</p>
-                <p className="text-muted-foreground text-sm">{new Date(bet.endDate).toLocaleDateString()}</p>
+                <p className="text-muted-foreground text-sm">{format(new Date(bet.endDate), "dd MMMM yyyy à H:mm", { locale: fr })}</p>{" "}
               </div>
               <div>
                 <p className="text-sm font-medium">Temps restant</p>
-                <p className="text-muted-foreground text-sm">{formatTimeLeft(calculateTimeLeft(bet.endDate))}</p>
+                <p className="text-muted-foreground text-sm">{formatTimeLeft(bet.endDate)}</p>
               </div>
               <div>
                 <p className="text-sm font-medium">Montant total des paris</p>
                 <p className="text-muted-foreground text-sm">
-                  {" "}
                   Montant: <IncrementNumber end={bet.totalBetAmount} duration={1000} /> €
                 </p>
               </div>
