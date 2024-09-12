@@ -70,7 +70,7 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
             role="combobox"
             aria-expanded={open}
             aria-label="Sélectionner une équipe"
-            className={cn("w-[200px] justify-between", className)}
+            className={cn("w-[220px] justify-between", className)}
           >
             <Avatar className="mr-2 size-5">
               <AvatarImage

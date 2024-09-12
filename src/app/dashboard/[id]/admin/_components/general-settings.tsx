@@ -12,15 +12,11 @@ export function GeneralSettings({ teamId }: { teamId: string }) {
   const [teamName, setTeamName] = useState("");
   const [defaultCoins, setDefaultCoins] = useState("300");
   const [defaultDuration, setDefaultDuration] = useState("1");
-  const [inviteLink, setInviteLink] = useState("");
+
+  const inviteLink = `https://example.com/invite/${teamId}`;
 
   const handleSaveGeneral = () => {
     // Logique pour sauvegarder les paramètres généraux
-  };
-
-  const handleGetInviteLink = () => {
-    // Logique pour générer le lien d'invitation
-    setInviteLink(`https://votre-app.com/invite/${teamId}`);
   };
 
   const handleDeleteTeam = () => {

@@ -12,7 +12,7 @@
       "rootDir": ["./"]
     }
   },
-  "rules" : {
+  "rules": {
     "tailwindcss/no-custom-classname": "off"
   },
   "overrides": [
