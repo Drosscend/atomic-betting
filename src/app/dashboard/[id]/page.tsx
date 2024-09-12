@@ -4,6 +4,7 @@ import { format } from "date-fns/format";
 import { fr } from "date-fns/locale";
 import { CoinsIcon, LandmarkIcon, LayersIcon, UsersIcon } from "lucide-react";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { IncrementNumber } from "@/components/increment-number";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -88,7 +89,9 @@ export default function Page({ params }: { params: { id: string } }) {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>{"Paris en cours"}</CardTitle>
-                  <Button variant="outline">Voir tous les paris en cours</Button>
+                  <Link href={`/dashboard/${params.id}/bets`} passHref>
+                    <Button variant="outline">Voir tous les paris en cours</Button>
+                  </Link>
                 </div>
               </CardHeader>
               <CardContent>
@@ -97,13 +100,8 @@ export default function Page({ params }: { params: { id: string } }) {
             </Card>
             <Card className="col-span-1 md:col-span-2 lg:col-span-2">
               <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle>{"Derniers paris joués"}</CardTitle>
-                    <CardDescription>{"Vos derniers paris joués"}</CardDescription>
-                  </div>
-                  <Button variant="outline">Voir tous les paris joués</Button>
-                </div>
+                <CardTitle>{"Derniers paris joués"}</CardTitle>
+                <CardDescription>{"Vos derniers paris joués"}</CardDescription>
               </CardHeader>
               <CardContent>
                 <RecentBet />
