@@ -6,12 +6,14 @@
   "settings": {
     "tailwindcss": {
       "callees": ["cn"],
-      "config": "tailwind.config.js",
-      "tailwindcss/no-custom-classname": "off"
+      "config": "tailwind.config.js"
     },
     "next": {
       "rootDir": ["./"]
     }
+  },
+  "rules" : {
+    "tailwindcss/no-custom-classname": "off"
   },
   "overrides": [
     {

@@ -87,7 +87,7 @@ export function CurrentBet() {
               <div>
                 <p className="text-sm font-medium">Montant total des paris</p>
                 <p className="text-muted-foreground text-sm">
-                  Montant: <IncrementNumber end={bet.totalBetAmount} duration={1000} /> €
+                  Montant: <IncrementNumber end={bet.totalBetAmount} duration={1000} /> A.c.
                 </p>
               </div>
             </div>
@@ -97,7 +97,7 @@ export function CurrentBet() {
                   Votre pari
                 </Badge>
                 <p className="text-sm">
-                  Montant: <IncrementNumber end={bet.userBetAmount} duration={1000} /> €
+                  Montant: <IncrementNumber end={bet.userBetAmount} duration={1000} /> A.c.
                 </p>
                 <p className="text-sm">Votre réponse: {bet.userAnswer}</p>
               </div>

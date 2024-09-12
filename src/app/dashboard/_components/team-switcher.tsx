@@ -4,6 +4,7 @@ import { TeamCreationForm } from "@/app/dashboard/_components/team-creation-form
 import { TeamDialog } from "@/app/dashboard/_components/team-dialog";
 import { TeamJoinForm } from "@/app/dashboard/_components/team-join-form";
 import { TeamSheet } from "@/app/dashboard/_components/team-sheet";
+import { useTeam } from "@/contexts/team-context";
 import { CaretSortIcon, CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import Link from "next/link";
@@ -25,15 +26,13 @@ const groups = [
   },
 ];
 
-type Team = (typeof groups)[number]["teams"][number];
-
 interface TeamSwitcherProps extends React.ComponentPropsWithoutRef<typeof PopoverTrigger> {}
 
 export function TeamSwitcher({ className }: TeamSwitcherProps) {
   const [open, setOpen] = useState(false);
   const [showNewTeamDialog, setShowNewTeamDialog] = useState(false);
   const [showJoinTeamDialog, setShowJoinTeamDialog] = useState(false);
-  const [selectedTeam, setSelectedTeam] = useState<Team>(groups[0].teams[0]);
+  const { selectedTeam, setSelectedTeam } = useTeam();
   const isMobile = useMediaQuery("(max-width: 640px)");
 
   const handleNewTeamSubmit = () => {
@@ -74,10 +73,14 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
             className={cn("w-[200px] justify-between", className)}
           >
             <Avatar className="mr-2 size-5">
-              <AvatarImage src={`https://avatar.vercel.sh/${selectedTeam.value}.png`} alt={selectedTeam.label} className="grayscale" />
+              <AvatarImage
+                src={`https://avatar.vercel.sh/${selectedTeam?.value || "default"}.png`}
+                alt={selectedTeam?.label || "Default"}
+                className="grayscale"
+              />
               <AvatarFallback>SC</AvatarFallback>
             </Avatar>
-            {selectedTeam.label}
+            {selectedTeam?.label || "Sélectionner une équipe"}
             <CaretSortIcon className="ml-auto size-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -102,7 +105,7 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
                           <AvatarFallback>SC</AvatarFallback>
                         </Avatar>
                         {team.label}
-                        <CheckIcon className={cn("ml-auto size-4", selectedTeam.value === team.value ? "opacity-100" : "opacity-0")} />
+                        <CheckIcon className={cn("ml-auto size-4", selectedTeam?.value === team.value ? "opacity-100" : "opacity-0")} />
                       </CommandItem>
                     </Link>
                   ))}

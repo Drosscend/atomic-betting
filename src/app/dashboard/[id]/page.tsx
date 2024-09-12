@@ -41,7 +41,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 <div className="text-2xl font-bold">
                   <IncrementNumber end={ATOMIC_COINS} />
                 </div>
-                <p className="text-muted-foreground text-xs">{`Gagné depuis le ${format(new Date(), "dd/MM/yyyy", { locale: fr })}`}</p>
+                <p className="text-muted-foreground text-xs">{`Gagné depuis le ${format(new Date(), "dd MMMM yyyy", { locale: fr })}`}</p>
               </CardContent>
             </Card>
             <Card>
