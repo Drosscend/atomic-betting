@@ -1,12 +1,7 @@
 "use client";
 
-import { TeamCreationForm } from "@/app/dashboard/_components/team-creation-form";
-import { TeamDialog } from "@/app/dashboard/_components/team-dialog";
-import { TeamJoinForm } from "@/app/dashboard/_components/team-join-form";
-import { TeamSheet } from "@/app/dashboard/_components/team-sheet";
 import { useTeam } from "@/contexts/team-context";
 import { CaretSortIcon, CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
-import { useMediaQuery } from "@uidotdev/usehooks";
 import Link from "next/link";
 import * as React from "react";
 import { useState } from "react";
@@ -30,36 +25,7 @@ interface TeamSwitcherProps extends React.ComponentPropsWithoutRef<typeof Popove
 
 export function TeamSwitcher({ className }: TeamSwitcherProps) {
   const [open, setOpen] = useState(false);
-  const [showNewTeamDialog, setShowNewTeamDialog] = useState(false);
-  const [showJoinTeamDialog, setShowJoinTeamDialog] = useState(false);
   const { selectedTeam, setSelectedTeam } = useTeam();
-  const isMobile = useMediaQuery("(max-width: 640px)");
-
-  const handleNewTeamSubmit = () => {
-    setShowNewTeamDialog(false);
-    // Add logic to handle new team creation
-  };
-
-  const NewTeamContent = (
-    <>
-      <h2>{"Créer une équipe"}</h2>
-      <p>{"Ajoutez une nouvelle équipe pour commencer vos paris"}</p>
-      <TeamCreationForm onSubmit={handleNewTeamSubmit} />
-    </>
-  );
-
-  const handleJoinTeamSubmit = () => {
-    setShowJoinTeamDialog(false);
-    // Add logic to handle team join
-  };
-
-  const JoinTeamContent = (
-    <>
-      <h2>{"Rejoindre une équipe"}</h2>
-      <p>{"Entrez l'identifiant de l'équipe pour la rejoindre"}</p>
-      <TeamJoinForm onSubmit={handleJoinTeamSubmit} />
-    </>
-  );
 
   return (
     <>
@@ -95,7 +61,6 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
                     <Link href={`/dashboard/${team.value}`} key={team.value} passHref>
                       <CommandItem
                         onSelect={() => {
-                          setSelectedTeam(team);
                           setOpen(false);
                         }}
                         className="text-sm"
@@ -118,7 +83,6 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
                 <CommandItem
                   onSelect={() => {
                     setOpen(false);
-                    setShowNewTeamDialog(true);
                   }}
                 >
                   <PlusCircledIcon className="mr-2 size-5" />
@@ -127,7 +91,6 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
                 <CommandItem
                   onSelect={() => {
                     setOpen(false);
-                    setShowJoinTeamDialog(true);
                   }}
                 >
                   <PlusCircledIcon className="mr-2 size-5" />
@@ -138,26 +101,6 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
           </Command>
         </PopoverContent>
       </Popover>
-
-      {isMobile ? (
-        <>
-          <TeamSheet isOpen={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
-            {NewTeamContent}
-          </TeamSheet>
-          <TeamSheet isOpen={showJoinTeamDialog} onOpenChange={setShowJoinTeamDialog}>
-            {JoinTeamContent}
-          </TeamSheet>
-        </>
-      ) : (
-        <>
-          <TeamDialog isOpen={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
-            {NewTeamContent}
-          </TeamDialog>
-          <TeamDialog isOpen={showJoinTeamDialog} onOpenChange={setShowJoinTeamDialog}>
-            {JoinTeamContent}
-          </TeamDialog>
-        </>
-      )}
     </>
   );
 }
