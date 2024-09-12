@@ -1,7 +1,9 @@
 "use client";
 
+import { useTeam } from "@/contexts/team-context";
 import { format, formatDistance } from "date-fns";
 import { fr } from "date-fns/locale";
+import Link from "next/link";
 import { IncrementNumber } from "@/components/increment-number";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -41,6 +43,7 @@ const bets: Bet[] = [
 ];
 
 export function CurrentBet() {
+  const { selectedTeam } = useTeam();
   const formatTimeLeft = (endDate: string) => {
     const now = new Date();
     const end = new Date(endDate);
@@ -111,7 +114,9 @@ export function CurrentBet() {
             )}
           </CardContent>
           <CardFooter>
-            <Button className="w-full">{bet.userBetAmount !== null ? "Voir les détails du pari" : "Placer un pari"}</Button>
+            <Link href={`/dashboard/${selectedTeam?.value}/bets/${bet.id}`} passHref className="w-full">
+              <Button className="w-full">{bet.userBetAmount !== null ? "Voir les détails du pari" : "Placer un pari"}</Button>
+            </Link>
           </CardFooter>
         </Card>
       ))}
