@@ -6,6 +6,9 @@ const nextConfig = {
       static: 180,
     },
   },
+  images: {
+    domains: ["avatar.vercel.sh"],
+  },
 };
 
 export default nextConfig;
