@@ -1,9 +1,14 @@
 "use client";
 
+import { toast } from "sonner";
+import { useAction } from "next-safe-action/hooks";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { joinTeam } from "../invitation.action";
 
 interface InvitationCardProps {
   teamId: string;
@@ -11,12 +16,29 @@ interface InvitationCardProps {
 }
 
 export function InvitationCard({ teamId, teamName }: InvitationCardProps) {
-  const handleJoinTeam = async () => {};
+  const router = useRouter();
+  const [isJoining, setIsJoining] = useState(false);
+
+  const { execute } = useAction(joinTeam, {
+    onSuccess: ({ data }) => {
+      toast(data?.message);
+      router.push("/dashboard");
+    },
+    onError: ({ error }) => {
+      toast(error?.serverError || "Une erreur est survenue lors de la tentative de rejoindre l'équipe.");
+    },
+  });
+
+  const handleJoinTeam = async () => {
+    setIsJoining(true);
+    await execute({ teamId });
+    setIsJoining(false);
+  };
 
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">{"Invitation pour rejoindre une équipe"}</CardTitle>
+        <CardTitle className="text-2xl font-bold">Invitation pour rejoindre une équipe</CardTitle>
         <CardDescription>{`ID de l'équipe : ${teamId}`}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -26,9 +48,11 @@ export function InvitationCard({ teamId, teamName }: InvitationCardProps) {
         </div>
       </CardContent>
       <CardFooter className="flex flex-col items-center justify-center space-y-4">
-        <Button onClick={handleJoinTeam}>{"Rejoindre l'équipe"}</Button>
+        <Button onClick={handleJoinTeam} disabled={isJoining}>
+          {isJoining ? "En cours..." : "Rejoindre l'équipe"}
+        </Button>
         <Link href="/dashboard" passHref>
-          <Button variant="outline">{"Aller au tableau de bord"}</Button>
+          <Button variant="outline">Aller au tableau de bord</Button>
         </Link>
       </CardFooter>
     </Card>
