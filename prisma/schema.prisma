@@ -46,6 +46,8 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  teams         Team[]    @relation("TeamMembers")
+  createdTeams  Team[]    @relation("TeamCreator")
 
   @@map("users")
 }
@@ -57,4 +59,16 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verificationtokens")
+}
+
+model Team {
+  id              String @id @default(uuid())
+  name            String
+  defaultCoins    Int    @default(300)
+  defaultHoursBet Int    @default(1)
+  creatorId       String
+  creator         User   @relation("TeamCreator", fields: [creatorId], references: [id])
+  users           User[] @relation("TeamMembers")
+
+  @@map("teams")
 }

@@ -3,22 +3,18 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { ErrorDisplay } from "@/components/error-display";
 import { auth } from "@/lib/auth";
-import { getTeamDetails } from "@/lib/team";
+import { getTeamByIdUnsecure } from "@/lib/database/team";
 
 export const metadata: Metadata = {
   title: "Invitation",
   description: "Page d'invitation à une équipe",
 };
 
-async function getTeamInfo(teamId: string) {
-  return getTeamDetails(teamId);
-}
-
 export default async function InvitationPage({ params }: { params: { id: string } }) {
   const session = await auth();
   if (!session) redirect("/sign-in");
 
-  const teamInfo = await getTeamInfo(params.id);
+  const teamInfo = await getTeamByIdUnsecure(params.id);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">

@@ -4,29 +4,27 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { getUserTeams } from "@/lib/database/team";
 
 export const metadata: Metadata = { title: "Dashboard", description: "Dashboard page" };
 
-const teams = [
-  { label: "M1 ICE", value: "e920f20c-2dfc-4239-9cb2-5db42682e143", members: 15 },
-  { label: "M2 ICE", value: "15c93707-69f6-4607-a115-dbfc3b3dacef", members: 22 },
-];
-
 export default async function Page() {
+  const teams = await getUserTeams();
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="mb-6 text-3xl font-bold">Tableau de bord</h1>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {teams.map((team) => (
-          <Card key={team.value} className="transition-shadow hover:shadow-lg">
+          <Card key={team.id} className="transition-shadow hover:shadow-lg">
             <CardHeader>
-              <CardTitle>{team.label}</CardTitle>
+              <CardTitle>{team.name}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex h-32 items-center justify-center rounded-lg">
                 <Image
-                  src={`https://avatar.vercel.sh/${team.value}.png`}
-                  alt={`${team.label} avatar`}
+                  src={`https://avatar.vercel.sh/${team.id}.png`}
+                  alt={`${team.name} avatar`}
                   className="size-24 rounded-full"
                   width={96}
                   height={96}
@@ -34,11 +32,11 @@ export default async function Page() {
               </div>
               <p className="mt-4 text-center">
                 <UsersIcon className="mr-2 inline-block" />
-                {team.members} membres
+                {team.users.length} membres
               </p>
             </CardContent>
             <CardFooter>
-              <Link href={`/dashboard/${team.value}`} passHref className="w-full">
+              <Link href={`/dashboard/${team.id}`} passHref className="w-full">
                 <Button className="w-full">{"Accéder à l'équipe"}</Button>
               </Link>
             </CardFooter>
