@@ -1,11 +1,11 @@
-import { Prisma, Team } from "@prisma/client";
+import { MembershipStatus, Prisma, Team } from "@prisma/client";
 import { notFound, redirect } from "next/navigation";
 import { cache } from "react";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/database/db";
 
-export type TeamWithUsers = Prisma.TeamGetPayload<{
-  include: { users: true };
+export type TeamWithMemberships = Prisma.TeamGetPayload<{
+  include: { memberships: true };
 }>;
 
 /**
@@ -13,7 +13,7 @@ export type TeamWithUsers = Prisma.TeamGetPayload<{
  * @param teamId The team ID.
  * @returns The team with its users.
  */
-export const getTeamById = cache(async (teamId: string): Promise<TeamWithUsers> => {
+export const getTeamById = cache(async (teamId: string): Promise<TeamWithMemberships> => {
   const session = await auth();
   if (!session?.user) {
     redirect("/sign-in");
@@ -22,14 +22,15 @@ export const getTeamById = cache(async (teamId: string): Promise<TeamWithUsers> 
   const team = await prisma.team.findFirst({
     where: {
       id: teamId,
-      users: {
+      memberships: {
         some: {
           id: session.user.id,
+          status: MembershipStatus.APPROVED,
         },
       },
     },
     include: {
-      users: true,
+      memberships: true,
     },
   });
 
@@ -45,7 +46,7 @@ export const getTeamById = cache(async (teamId: string): Promise<TeamWithUsers> 
  * @param teamId The team ID.
  * @returns The team with its users.
  */
-export const getTeamByIdUnsecure = cache(async (teamId: string): Promise<TeamWithUsers> => {
+export const getTeamByIdUnsecure = cache(async (teamId: string): Promise<TeamWithMemberships> => {
   const session = await auth();
   if (!session?.user) {
     redirect("/sign-in");
@@ -53,7 +54,7 @@ export const getTeamByIdUnsecure = cache(async (teamId: string): Promise<TeamWit
 
   const team = await prisma.team.findFirst({
     include: {
-      users: true,
+      memberships: true,
     },
   });
 
@@ -76,9 +77,10 @@ export const getTeams = cache(async (): Promise<Team[]> => {
 
   return prisma.team.findMany({
     where: {
-      users: {
+      memberships: {
         some: {
           id: session.user.id,
+          status: MembershipStatus.APPROVED,
         },
       },
     },
@@ -92,7 +94,7 @@ export const getTeams = cache(async (): Promise<Team[]> => {
  * Get all teams the user is part of with their users.
  * @returns The teams with their users.
  */
-export const getUserTeams = cache(async (): Promise<TeamWithUsers[]> => {
+export const getTeamsWithMemberships = cache(async (): Promise<TeamWithMemberships[]> => {
   const session = await auth();
   if (!session?.user) {
     redirect("/sign-in");
@@ -100,14 +102,15 @@ export const getUserTeams = cache(async (): Promise<TeamWithUsers[]> => {
 
   return prisma.team.findMany({
     where: {
-      users: {
+      memberships: {
         some: {
           id: session.user.id,
+          status: MembershipStatus.APPROVED,
         },
       },
     },
     include: {
-      users: true,
+      memberships: true,
     },
     orderBy: {
       name: "asc",

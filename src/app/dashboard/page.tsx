@@ -1,15 +1,16 @@
+import { MembershipStatus } from "@prisma/client";
 import { PlusIcon, UserPlusIcon, UsersIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { getUserTeams } from "@/lib/database/team";
+import { getTeamsWithMemberships } from "@/lib/database/team";
 
 export const metadata: Metadata = { title: "Dashboard", description: "Dashboard page" };
 
 export default async function Page() {
-  const teams = await getUserTeams();
+  const teams = await getTeamsWithMemberships();
 
   return (
     <div className="container mx-auto p-4">
@@ -32,7 +33,7 @@ export default async function Page() {
               </div>
               <p className="mt-4 text-center">
                 <UsersIcon className="mr-2 inline-block" />
-                {team.users.length} membres
+                {team.memberships.filter((membership) => membership.status === MembershipStatus.APPROVED).length} membres
               </p>
             </CardContent>
             <CardFooter>

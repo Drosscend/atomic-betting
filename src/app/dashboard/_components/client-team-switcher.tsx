@@ -8,11 +8,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { type TeamWithUsers } from "@/lib/database/team";
+import { type TeamWithMemberships } from "@/lib/database/team";
 import { cn } from "@/lib/utils";
 
 interface ClientTeamSwitcherProps extends ComponentPropsWithoutRef<typeof PopoverTrigger> {
-  teams: TeamWithUsers[];
+  teams: TeamWithMemberships[];
 }
 
 export function ClientTeamSwitcher({ className, teams }: ClientTeamSwitcherProps) {

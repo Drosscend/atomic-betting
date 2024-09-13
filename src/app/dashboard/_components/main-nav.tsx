@@ -1,14 +1,15 @@
 "use client";
 
 import { useTeam } from "@/contexts/team-context";
-import { Team } from "@prisma/client";
+import { MembershipRole, MembershipStatus } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { HTMLAttributes, useMemo } from "react";
+import type { TeamWithMemberships } from "@/lib/database/team";
 import { cn } from "@/lib/utils";
 
 interface MainNavProps extends HTMLAttributes<HTMLElement> {
-  teams: Team[];
+  teams: TeamWithMemberships[];
 }
 
 export function MainNav({ className, teams, ...props }: MainNavProps) {
@@ -21,14 +22,17 @@ export function MainNav({ className, teams, ...props }: MainNavProps) {
     return null;
   }
 
-  const isAdmin = session?.user?.id === selectedTeam.creatorId;
+  const isAdminOrManager = selectedTeam.memberships.some(
+    (membership) =>
+      (membership.userId === session?.user?.id && membership.role === MembershipRole.ADMIN) || membership.role === MembershipRole.MANAGER
+  );
 
   return (
     <nav className={cn("flex items-center space-x-4 lg:space-x-6", className)} {...props}>
       <Link href={`/dashboard/${selectedTeamId}`} className="hover:text-primary text-sm font-medium transition-colors">
         {`Dashboard`}
       </Link>
-      {isAdmin && (
+      {isAdminOrManager && (
         <Link href={`/dashboard/${selectedTeamId}/admin`} className="hover:text-primary text-sm font-medium transition-colors">
           {`Administration`}
         </Link>
