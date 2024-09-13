@@ -19,7 +19,7 @@ export default async function InvitationPage({ params }: { params: { id: string 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       {teamInfo ? (
-        <InvitationCard teamId={params.id} teamName={teamInfo.name} />
+        <InvitationCard teamId={teamInfo.id} teamName={teamInfo.name} />
       ) : (
         <ErrorDisplay
           title="Équipe non trouvée"

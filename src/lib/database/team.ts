@@ -46,7 +46,7 @@ export const getTeamById = cache(async (teamId: string): Promise<TeamWithMembers
  * @param teamId The team ID.
  * @returns The team with its users.
  */
-export const getTeamByIdUnsecure = cache(async (teamId: string): Promise<TeamWithMemberships> => {
+export const getTeamByIdUnsecure = cache(async (teamId: string): Promise<TeamWithMemberships | null> => {
   const session = await auth();
   if (!session?.user) {
     redirect("/sign-in");
@@ -58,36 +58,7 @@ export const getTeamByIdUnsecure = cache(async (teamId: string): Promise<TeamWit
     },
   });
 
-  if (!team) {
-    notFound();
-  }
-
   return team;
-});
-
-/**
- * Get all teams the user is part of.
- * @returns The teams.
- */
-export const getTeams = cache(async (): Promise<Team[]> => {
-  const session = await auth();
-  if (!session?.user) {
-    redirect("/sign-in");
-  }
-
-  return prisma.team.findMany({
-    where: {
-      memberships: {
-        some: {
-          id: session.user.id,
-          status: MembershipStatus.APPROVED,
-        },
-      },
-    },
-    orderBy: {
-      name: "asc",
-    },
-  });
 });
 
 /**

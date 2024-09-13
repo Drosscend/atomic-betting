@@ -1,14 +1,13 @@
 "use client";
 
+import { joinTeam } from "@/app/invite/[id]/invitation.action";
+import { Loader2Icon } from "lucide-react";
 import { toast } from "sonner";
 import { useAction } from "next-safe-action/hooks";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { joinTeam } from "../invitation.action";
 
 interface InvitationCardProps {
   teamId: string;
@@ -16,29 +15,67 @@ interface InvitationCardProps {
 }
 
 export function InvitationCard({ teamId, teamName }: InvitationCardProps) {
-  const router = useRouter();
-  const [isJoining, setIsJoining] = useState(false);
-
-  const { execute } = useAction(joinTeam, {
-    onSuccess: ({ data }) => {
-      toast(data?.message);
-      router.push("/dashboard");
+  const { execute, status, result, isPending } = useAction(joinTeam, {
+    onSuccess: (result) => {
+      if (result.data) {
+        toast(result.data.message);
+      }
     },
-    onError: ({ error }) => {
-      toast(error?.serverError || "Une erreur est survenue lors de la tentative de rejoindre l'équipe.");
+    onError: (result) => {
+      const errorMessage = result.error.serverError || `Une erreur est survenue lors de la tentative de rejoindre l'équipe.`;
+      toast(errorMessage);
     },
   });
 
-  const handleJoinTeam = async () => {
-    setIsJoining(true);
-    await execute({ teamId });
-    setIsJoining(false);
+  const handleJoinTeam = () => {
+    execute({ teamId });
+  };
+
+  const renderJoinButton = () => {
+    const getButtonText = () => {
+      switch (status) {
+        case "idle":
+          return "Rejoindre l'équipe";
+        case "executing":
+          return "En cours...";
+        case "hasErrored":
+          return "Erreur - Réessayer";
+        default:
+          return "Rejoindre l'équipe";
+      }
+    };
+
+    const isDisabled = status === "executing" || status === "hasSucceeded";
+
+    return (
+      <Button onClick={handleJoinTeam} disabled={isDisabled} variant={status === "hasErrored" ? "destructive" : "default"}>
+        {isPending && <Loader2Icon className="mr-2 animate-spin" />}
+        <span>{getButtonText()}</span>
+      </Button>
+    );
+  };
+
+  const renderStatusMessage = () => {
+    if (status !== "hasSucceeded" || !result.data) return null;
+
+    switch (result.data.status) {
+      case "PENDING_APPROVAL":
+        return <p className="text-center text-yellow-600">{`Votre demande d'adhésion est en attente d'approbation.`}</p>;
+      case "ALREADY_MEMBER":
+        return <p className="text-center text-green-600">{`Vous êtes déjà membre de cette équipe.`}</p>;
+      case "JOINED":
+        return <p className="text-center text-green-600">{`Votre demande d'adhésion a été soumise avec succès.`}</p>;
+      case "ERROR":
+        return <p className="text-center text-red-600">{`Une erreur est survenue. Veuillez réessayer.`}</p>;
+      default:
+        return null;
+    }
   };
 
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">Invitation pour rejoindre une équipe</CardTitle>
+        <CardTitle className="text-2xl font-bold">{`Invitation pour rejoindre une équipe`}</CardTitle>
         <CardDescription>{`ID de l'équipe : ${teamId}`}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -48,11 +85,10 @@ export function InvitationCard({ teamId, teamName }: InvitationCardProps) {
         </div>
       </CardContent>
       <CardFooter className="flex flex-col items-center justify-center space-y-4">
-        <Button onClick={handleJoinTeam} disabled={isJoining}>
-          {isJoining ? "En cours..." : "Rejoindre l'équipe"}
-        </Button>
+        {renderJoinButton()}
+        {renderStatusMessage()}
         <Link href="/dashboard" passHref>
-          <Button variant="outline">Aller au tableau de bord</Button>
+          <Button variant="outline">{`Aller au tableau de bord`}</Button>
         </Link>
       </CardFooter>
     </Card>
