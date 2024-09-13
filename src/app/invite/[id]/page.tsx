@@ -1,6 +1,8 @@
 import { InvitationCard } from "@/app/invite/[id]/_compontents/invitation-card";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { ErrorDisplay } from "@/components/error-display";
+import { auth } from "@/lib/auth";
 import { getTeamDetails } from "@/lib/team";
 
 export const metadata: Metadata = {
@@ -13,6 +15,9 @@ async function getTeamInfo(teamId: string) {
 }
 
 export default async function InvitationPage({ params }: { params: { id: string } }) {
+  const session = await auth();
+  if (!session) redirect("/sign-in");
+
   const teamInfo = await getTeamInfo(params.id);
 
   return (

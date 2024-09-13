@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export function Hero() {
@@ -12,7 +13,9 @@ export function Hero() {
             </p>
           </div>
           <div className="space-x-4">
-            <Button size="lg">{"Commencer"}</Button>
+            <Link href={"/sign-in"}>
+              <Button size="lg">{"Commencer"}</Button>
+            </Link>
             <Button size="lg" variant="outline">
               {"En savoir plus"}
             </Button>

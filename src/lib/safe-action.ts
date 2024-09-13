@@ -1,4 +1,5 @@
 import { DEFAULT_SERVER_ERROR_MESSAGE, createSafeActionClient } from "next-safe-action";
+import { auth } from "@/lib/auth";
 
 class ActionError extends Error {}
 
@@ -18,8 +19,17 @@ const actionClient = createSafeActionClient({
 export const authActionClient = actionClient
   // Define authorization middleware.
   .use(async ({ next }) => {
-    // TODO: Implement your authorization logic here.
-    const userId = "123";
+    const session = await auth();
 
-    return next({ ctx: { userId } });
+    if (!session) {
+      throw new ActionError("Unauthorized");
+    }
+
+    const { user } = session;
+
+    if (!user) {
+      throw new ActionError("Unauthorized");
+    }
+
+    return next({ ctx: { user } });
   });

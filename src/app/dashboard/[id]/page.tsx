@@ -18,7 +18,7 @@ const WINNING_BETS = 13;
 const TOTAL_BETS = 22;
 const TOTAL_USERS = 22;
 
-export default function Page({ params }: { params: { id: string } }) {
+export default async function Page({ params }: { params: { id: string } }) {
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       <div className="flex items-center">

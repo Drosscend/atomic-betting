@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Page d'administration des Bets",
 };
 
-export default function AdminBetsPage() {
+export default async function AdminBetsPage() {
   return (
     <div className="flex-1 space-y-8 p-8 pt-6">
       <div className="flex items-center justify-between">

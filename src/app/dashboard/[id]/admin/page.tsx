@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "Page d'administration du tableau de bord",
 };
 
-export default function AdminPage({ params }: { params: { id: string } }) {
+export default async function AdminPage({ params }: { params: { id: string } }) {
   return (
     <div className="flex-1 space-y-8 p-8 pt-6">
       <h1 className="flex items-center justify-between text-3xl font-bold tracking-tight">

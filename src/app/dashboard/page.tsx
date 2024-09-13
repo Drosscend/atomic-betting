@@ -12,7 +12,7 @@ const teams = [
   { label: "M2 ICE", value: "15c93707-69f6-4607-a115-dbfc3b3dacef", members: 22 },
 ];
 
-export default function Page() {
+export default async function Page() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="mb-6 text-3xl font-bold">Tableau de bord</h1>

@@ -17,7 +17,7 @@ export type UserInfo = {
   coins: number;
 };
 
-export default function Page({ params }: { params: { betId: string } }) {
+export default async function Page({ params }: { params: { betId: string } }) {
   const bet: Bet = {
     id: params.betId,
     title: "Qui va gagner la Coupe du Monde 2026?",

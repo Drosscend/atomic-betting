@@ -1,10 +1,11 @@
-"use client";
-
+import type { Metadata } from "next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CompletedBets } from "./_components/completed-bets";
 import { OngoingBets } from "./_components/ongoing-bets";
 
-export default function BetsPage() {
+export const metadata: Metadata = { title: "Dashboard +- Bets", description: "Dashboard bets page" };
+
+export default async function BetsPage() {
   return (
     <div className="container mx-auto p-6">
       <h1 className="mb-6 text-3xl font-bold">Mes Paris</h1>

@@ -3,9 +3,9 @@
 import { betSchema } from "@/app/dashboard/[id]/admin/bets/bet.schema";
 import { authActionClient } from "@/lib/safe-action";
 
-export const createBet = authActionClient.schema(betSchema).action(async ({ parsedInput, ctx: { userId } }) => {
+export const createBet = authActionClient.schema(betSchema).action(async ({ parsedInput, ctx: { user } }) => {
   // TODO: Implement actual bet creation logic
-  console.log("Creating bet:", parsedInput, "for user:", userId);
+  console.log("Creating bet:", parsedInput, "for user:", user.id);
 
   // Simulating a successful creation
   return {
@@ -14,9 +14,9 @@ export const createBet = authActionClient.schema(betSchema).action(async ({ pars
   };
 });
 
-export const updateBet = authActionClient.schema(betSchema).action(async ({ parsedInput, ctx: { userId } }) => {
+export const updateBet = authActionClient.schema(betSchema).action(async ({ parsedInput, ctx: { user } }) => {
   // TODO: Implement actual bet update logic
-  console.log("Updating bet:", parsedInput, "for user:", userId);
+  console.log("Updating bet:", parsedInput, "for user:", user.id);
 
   // Simulating a successful update
   return {
