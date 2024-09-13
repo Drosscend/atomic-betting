@@ -38,7 +38,7 @@ export default function Page() {
               </p>
             </CardContent>
             <CardFooter>
-              <Link href={`/dashboard/${team.value}`} passHref>
+              <Link href={`/dashboard/${team.value}`} passHref className="w-full">
                 <Button className="w-full">{"Accéder à l'équipe"}</Button>
               </Link>
             </CardFooter>
