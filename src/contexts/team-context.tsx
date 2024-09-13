@@ -1,24 +1,23 @@
 "use client";
 
 import React, { ReactNode, createContext, useContext, useState } from "react";
-import { type TeamWithUsers } from "@/lib/database/team";
 
 type TeamContextType = {
-  selectedTeam: TeamWithUsers | null;
-  setSelectedTeam: (team: TeamWithUsers | null) => void;
+  selectedTeamId: string | null;
+  setSelectedTeamId: (teamId: string) => void;
 };
 
 const TeamContext = createContext<TeamContextType | undefined>(undefined);
 
 type TeamProviderProps = {
   children: ReactNode;
-  initialTeam?: TeamWithUsers;
+  initialTeamId?: string | null;
 };
 
-export function TeamProvider({ children, initialTeam }: TeamProviderProps) {
-  const [selectedTeam, setSelectedTeam] = useState<TeamWithUsers | null>(initialTeam || null);
+export function TeamProvider({ children, initialTeamId }: TeamProviderProps) {
+  const [selectedTeamId, setSelectedTeamId] = useState<string | null>(initialTeamId ?? null);
 
-  return <TeamContext.Provider value={{ selectedTeam, setSelectedTeam }}>{children}</TeamContext.Provider>;
+  return <TeamContext.Provider value={{ selectedTeamId, setSelectedTeamId }}>{children}</TeamContext.Provider>;
 }
 
 export function useTeam() {

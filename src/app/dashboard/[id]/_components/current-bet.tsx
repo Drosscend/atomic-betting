@@ -43,7 +43,7 @@ const bets: Bet[] = [
 ];
 
 export function CurrentBet() {
-  const { selectedTeam } = useTeam();
+  const { selectedTeamId } = useTeam();
   const formatTimeLeft = (endDate: string) => {
     const now = new Date();
     const end = new Date(endDate);
@@ -114,7 +114,7 @@ export function CurrentBet() {
             )}
           </CardContent>
           <CardFooter>
-            <Link href={`/dashboard/${selectedTeam?.value}/bets/${bet.id}`} passHref className="w-full">
+            <Link href={`/dashboard/${selectedTeamId}/bets/${bet.id}`} passHref className="w-full">
               <Button className="w-full">{bet.userBetAmount !== null ? "Voir les détails du pari" : "Placer un pari"}</Button>
             </Link>
           </CardFooter>

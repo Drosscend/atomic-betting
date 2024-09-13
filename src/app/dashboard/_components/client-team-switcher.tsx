@@ -3,7 +3,7 @@
 import { useTeam } from "@/contexts/team-context";
 import { CaretSortIcon, CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
-import { type ComponentPropsWithoutRef, useState } from "react";
+import { type ComponentPropsWithoutRef, useMemo, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
@@ -17,7 +17,9 @@ interface ClientTeamSwitcherProps extends ComponentPropsWithoutRef<typeof Popove
 
 export function ClientTeamSwitcher({ className, teams }: ClientTeamSwitcherProps) {
   const [open, setOpen] = useState(false);
-  const { selectedTeam, setSelectedTeam } = useTeam();
+  const { selectedTeamId, setSelectedTeamId } = useTeam();
+
+  const selectedTeam = useMemo(() => teams.find((team) => team.id === selectedTeamId), [teams, selectedTeamId]);
 
   const groups = [
     {
@@ -38,7 +40,7 @@ export function ClientTeamSwitcher({ className, teams }: ClientTeamSwitcherProps
         >
           <Avatar className="mr-2 size-5">
             <AvatarImage
-              src={`https://avatar.vercel.sh/${selectedTeam?.id || "default"}.png`}
+              src={`https://avatar.vercel.sh/${selectedTeamId || "default"}.png`}
               alt={selectedTeam?.name || "Default"}
               className="grayscale"
             />
@@ -59,7 +61,7 @@ export function ClientTeamSwitcher({ className, teams }: ClientTeamSwitcherProps
                   <Link href={`/dashboard/${team.value}`} key={team.value} passHref>
                     <CommandItem
                       onSelect={() => {
-                        setSelectedTeam(teams.find((t) => t.id === team.value) || null);
+                        setSelectedTeamId(team.value);
                         setOpen(false);
                       }}
                       className="text-sm"
@@ -69,7 +71,7 @@ export function ClientTeamSwitcher({ className, teams }: ClientTeamSwitcherProps
                         <AvatarFallback>SC</AvatarFallback>
                       </Avatar>
                       {team.label}
-                      <CheckIcon className={cn("ml-auto size-4", selectedTeam?.id === team.value ? "opacity-100" : "opacity-0")} />
+                      <CheckIcon className={cn("ml-auto size-4", selectedTeamId === team.value ? "opacity-100" : "opacity-0")} />
                     </CommandItem>
                   </Link>
                 ))}
