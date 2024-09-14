@@ -5,20 +5,29 @@ import { fr } from "date-fns/locale";
 import { CoinsIcon, LandmarkIcon, LayersIcon, UsersIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { IncrementNumber } from "@/components/increment-number";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { auth } from "@/lib/auth";
+import { getTeamById } from "@/lib/database/team";
 
 export const metadata: Metadata = { title: "Dashboard", description: "Dashboard page" };
 
-const ATOMIC_COINS = 50300;
-const TOTAL_COINS = 1356680;
 const WINNING_BETS = 13;
 const TOTAL_BETS = 22;
-const TOTAL_USERS = 22;
 
 export default async function Page({ params }: { params: { id: string } }) {
+  const team = await getTeamById(params.id);
+  const session = await auth();
+  const user = session?.user;
+  if (!user) redirect("/sign-in");
+
+  const userCoins = team.memberships.find((m) => m.userId === user.id)?.coins ?? 0;
+  const totalCoins = team.memberships.reduce((acc, m) => acc + m.coins, 0);
+  const totalUsers = team.memberships.length;
+
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       <div className="flex items-center">
@@ -40,7 +49,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  <IncrementNumber end={ATOMIC_COINS} />
+                  <IncrementNumber end={userCoins} />
                 </div>
                 <p className="text-muted-foreground text-xs">{`Gagné depuis le ${format(new Date(), "dd MMMM yyyy", { locale: fr })}`}</p>
               </CardContent>
@@ -52,7 +61,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  <IncrementNumber end={TOTAL_COINS} />
+                  <IncrementNumber end={totalCoins} />
                 </div>
                 <p className="text-muted-foreground text-xs">{"Total des coins en circulation"}</p>
               </CardContent>
@@ -78,7 +87,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  <IncrementNumber end={TOTAL_USERS} duration={1000} />
+                  <IncrementNumber end={totalUsers} duration={1000} />
                 </div>
                 <p className="text-muted-foreground text-xs">{"Nombre total d'utilisateurs dans l'équipe"}</p>
               </CardContent>

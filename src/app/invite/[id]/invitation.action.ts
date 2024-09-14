@@ -1,11 +1,11 @@
 "use server";
 
-import { joinTeamSchema } from "@/validations/invitation-schema";
+import { joinTeamSchema } from "@/validations/invitation.schema";
 import { MembershipRole, MembershipStatus } from "@prisma/client";
 import { prisma } from "@/lib/database/db";
 import { authActionClient } from "@/lib/safe-action";
 
-type JoinTeamStatus = "ALREADY_MEMBER" | "PENDING_APPROVAL" | "JOINED" | "ERROR";
+type JoinTeamStatus = "ALREADY_MEMBER" | "PENDING_APPROVAL" | "JOINED" | "REJECTED" | "ERROR";
 
 type JoinTeamResult = {
   status: JoinTeamStatus;
@@ -46,16 +46,22 @@ export const joinTeam = authActionClient
       });
 
       if (existingMembership) {
-        if (existingMembership.status === MembershipStatus.APPROVED) {
-          return {
-            status: "ALREADY_MEMBER",
-            message: `Vous êtes déjà membre de cette équipe.`,
-          };
-        } else if (existingMembership.status === MembershipStatus.PENDING) {
-          return {
-            status: "PENDING_APPROVAL",
-            message: `Votre demande d'adhésion est en attente d'approbation.`,
-          };
+        switch (existingMembership.status) {
+          case MembershipStatus.APPROVED:
+            return {
+              status: "ALREADY_MEMBER",
+              message: `Vous êtes déjà membre de cette équipe.`,
+            };
+          case MembershipStatus.PENDING:
+            return {
+              status: "PENDING_APPROVAL",
+              message: `Votre demande d'adhésion est en attente d'approbation.`,
+            };
+          case MembershipStatus.REJECTED:
+            return {
+              status: "REJECTED",
+              message: `Votre demande d'adhésion a été rejetée. Vous ne pouvez pas rejoindre cette équipe.`,
+            };
         }
       }
 
@@ -65,6 +71,7 @@ export const joinTeam = authActionClient
           teamId,
           status: MembershipStatus.PENDING,
           role: MembershipRole.MEMBER,
+          coins: team.defaultCoins,
         },
       });
 

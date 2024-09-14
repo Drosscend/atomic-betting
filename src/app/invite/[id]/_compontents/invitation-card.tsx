@@ -60,13 +60,15 @@ export function InvitationCard({ teamId, teamName }: InvitationCardProps) {
 
     switch (result.data.status) {
       case "PENDING_APPROVAL":
-        return <p className="text-center text-yellow-600">{`Votre demande d'adhésion est en attente d'approbation.`}</p>;
+        return <p className="text-center text-yellow-600">{result.data.message}</p>;
       case "ALREADY_MEMBER":
-        return <p className="text-center text-green-600">{`Vous êtes déjà membre de cette équipe.`}</p>;
+        return <p className="text-center text-green-600">{result.data.message}</p>;
       case "JOINED":
-        return <p className="text-center text-green-600">{`Votre demande d'adhésion a été soumise avec succès.`}</p>;
+        return <p className="text-center text-green-600">{result.data.message}</p>;
+      case "REJECTED":
+        return <p className="text-center text-red-600">{result.data.message}</p>;
       case "ERROR":
-        return <p className="text-center text-red-600">{`Une erreur est survenue. Veuillez réessayer.`}</p>;
+        return <p className="text-center text-red-600">{result.data.message}</p>;
       default:
         return null;
     }

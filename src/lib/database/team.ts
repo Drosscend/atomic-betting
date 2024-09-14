@@ -24,7 +24,7 @@ export const getTeamById = cache(async (teamId: string): Promise<TeamWithMembers
       id: teamId,
       memberships: {
         some: {
-          id: session.user.id,
+          userId: session.user.id,
           status: MembershipStatus.APPROVED,
         },
       },
@@ -75,7 +75,7 @@ export const getTeamsWithMemberships = cache(async (): Promise<TeamWithMembershi
     where: {
       memberships: {
         some: {
-          id: session.user.id,
+          userId: session.user.id,
           status: MembershipStatus.APPROVED,
         },
       },

@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -79,6 +80,7 @@ model TeamMembership {
   teamId    String
   status    MembershipStatus
   role      MembershipRole   @default(MEMBER)
+  coins     Int              @default(0)
   user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   team      Team             @relation(fields: [teamId], references: [id], onDelete: Cascade)
   createdAt DateTime         @default(now())

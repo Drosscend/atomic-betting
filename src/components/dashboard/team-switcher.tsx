@@ -2,29 +2,29 @@
 
 import { useTeam } from "@/contexts/team-context";
 import { CaretSortIcon, CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { type ComponentPropsWithoutRef, useMemo, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { type TeamWithMemberships } from "@/lib/database/team";
 import { cn } from "@/lib/utils";
 
-interface ClientTeamSwitcherProps extends ComponentPropsWithoutRef<typeof PopoverTrigger> {
-  teams: TeamWithMemberships[];
-}
+interface TeamSwitcherProps extends ComponentPropsWithoutRef<typeof PopoverTrigger> {}
 
-export function ClientTeamSwitcher({ className, teams }: ClientTeamSwitcherProps) {
+export function TeamSwitcher({ className }: TeamSwitcherProps) {
   const [open, setOpen] = useState(false);
   const { selectedTeamId, setSelectedTeamId } = useTeam();
+  const { data: session } = useSession();
 
-  const selectedTeam = useMemo(() => teams.find((team) => team.id === selectedTeamId), [teams, selectedTeamId]);
+  const teams = useMemo(() => session?.user?.teams || [], [session?.user?.teams]);
+  const selectedTeam = useMemo(() => teams.find((team) => team.teamId === selectedTeamId), [teams, selectedTeamId]);
 
   const groups = [
     {
       label: `Mes équipes`,
-      teams: teams.map((team) => ({ label: team.name, value: team.id })),
+      teams: teams.map((team) => ({ label: team.teamName, value: team.teamId })),
     },
   ];
 
@@ -41,12 +41,12 @@ export function ClientTeamSwitcher({ className, teams }: ClientTeamSwitcherProps
           <Avatar className="mr-2 size-5">
             <AvatarImage
               src={`https://avatar.vercel.sh/${selectedTeamId || "default"}.png`}
-              alt={selectedTeam?.name || "Default"}
+              alt={selectedTeam?.teamName || "Default"}
               className="grayscale"
             />
             <AvatarFallback>SC</AvatarFallback>
           </Avatar>
-          {selectedTeam?.name || `Sélectionner une équipe`}
+          {selectedTeam?.teamName || `Sélectionner une équipe`}
           <CaretSortIcon className="ml-auto size-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -81,14 +81,17 @@ export function ClientTeamSwitcher({ className, teams }: ClientTeamSwitcherProps
           <CommandSeparator />
           <CommandList>
             <CommandGroup>
-              <CommandItem
-                onSelect={() => {
-                  setOpen(false);
-                }}
-              >
-                <PlusCircledIcon className="mr-2 size-5" />
-                {`Créer une équipe`}
-              </CommandItem>
+              <Link href={`/dashboard/new-team`} passHref>
+                <CommandItem
+                  onSelect={() => {
+                    setOpen(false);
+                  }}
+                  className="text-sm"
+                >
+                  <PlusCircledIcon className="mr-2 size-5" />
+                  {`Créer une équipe`}
+                </CommandItem>
+              </Link>
               <CommandItem
                 onSelect={() => {
                   setOpen(false);
