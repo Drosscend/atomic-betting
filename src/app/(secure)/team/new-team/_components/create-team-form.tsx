@@ -40,9 +40,9 @@ export function CreateTeamForm() {
         toast(`Une erreur est survenue : ${result.data?.message || "Erreur inconnue"}`);
       }
     },
-    onError: (error) => {
+    onError: ({ error }) => {
       setIsSubmitting(false);
-      toast(`Une erreur est survenue : ${error.error.serverError || "Erreur inconnue"}`);
+      toast(`Une erreur est survenue : ${error.serverError || "Erreur inconnue"}`);
     },
   });
 

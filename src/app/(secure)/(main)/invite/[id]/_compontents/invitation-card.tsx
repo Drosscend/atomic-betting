@@ -21,8 +21,8 @@ export function InvitationCard({ teamId, teamName }: InvitationCardProps) {
         toast(result.data.message);
       }
     },
-    onError: (result) => {
-      const errorMessage = result.error.serverError || `Une erreur est survenue lors de la tentative de rejoindre l'équipe.`;
+    onError: ({ error }) => {
+      const errorMessage = error.serverError || `Une erreur est survenue lors de la tentative de rejoindre l'équipe.`;
       toast(errorMessage);
     },
   });

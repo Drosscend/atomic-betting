@@ -1,8 +1,9 @@
 "use client";
 
-import { LaptopIcon, LogOut, MoonIcon, Settings, SunIcon, User } from "lucide-react";
+import { LaptopIcon, LogOut, MoonIcon, Settings, SunIcon } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -46,14 +47,12 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <User className="mr-2 size-4" />
-            <span>{`Profil`}</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Settings className="mr-2 size-4" />
-            <span>{`Paramètres`}</span>
-          </DropdownMenuItem>
+          <Link href={`/settings`} passHref>
+            <DropdownMenuItem className={"cursor-pointer"}>
+              <Settings className="mr-2 size-4" />
+              <span>{`Paramètres`}</span>
+            </DropdownMenuItem>
+          </Link>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <SunIcon className="mr-2 size-4" />

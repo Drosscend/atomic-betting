@@ -39,7 +39,7 @@ export function TeamSwitcher() {
               <div className="flex items-center">
                 <Avatar className="mr-2 size-5">
                   <AvatarImage src={`https://avatar.vercel.sh/${selectedTeamId}.png`} alt={selectedTeam.teamName} className="grayscale" />
-                  <AvatarFallback>SC</AvatarFallback>
+                  <AvatarFallback>{selectedTeam.teamName[0]}</AvatarFallback>
                 </Avatar>
                 {selectedTeam.teamName}
               </div>
@@ -50,7 +50,7 @@ export function TeamSwitcher() {
           <SelectGroup>
             <SelectLabel>Mes équipes</SelectLabel>
             {teams.map((team) => (
-              <SelectItem key={team.teamId} value={team.teamId}>
+              <SelectItem key={team.teamId} value={team.teamId} className="cursor-pointer">
                 <div className="flex items-center">
                   <Avatar className="mr-2 size-5">
                     <AvatarImage src={`https://avatar.vercel.sh/${team.teamId}.png`} alt={team.teamName} className="grayscale" />
@@ -64,7 +64,7 @@ export function TeamSwitcher() {
           <Separator className="my-2" />
           <SelectGroup>
             <Link href="/dashboard" passHref>
-              <SelectItem value="dashboard">
+              <SelectItem value="dashboard" className="cursor-pointer">
                 <div className="flex items-center">
                   <HomeIcon className="mr-2 size-4" />
                   Tableau de bord
@@ -72,14 +72,14 @@ export function TeamSwitcher() {
               </SelectItem>
             </Link>
             <Link href="/team/new-team" passHref>
-              <SelectItem value="new-team">
+              <SelectItem value="new-team" className="cursor-pointer">
                 <div className="flex items-center">
                   <PlusCircle className="mr-2 size-4" />
                   Créer une équipe
                 </div>
               </SelectItem>
             </Link>
-            <SelectItem value="join-team">
+            <SelectItem value="join-team" className="cursor-pointer">
               <div className="flex items-center">
                 <UserPlus className="mr-2 size-4" />
                 Rejoindre une équipe
