@@ -1,11 +1,23 @@
-import { MembershipStatus, Prisma, Team } from "@prisma/client";
+import { MembershipStatus, Prisma } from "@prisma/client";
 import { notFound, redirect } from "next/navigation";
 import { cache } from "react";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/database/db";
 
 export type TeamWithMemberships = Prisma.TeamGetPayload<{
-  include: { memberships: true };
+  include: {
+    memberships: {
+      include: {
+        user: true;
+      };
+    };
+  };
+}>;
+
+export type MembershipsWithUsers = Prisma.TeamMembershipGetPayload<{
+  include: {
+    user: true;
+  };
 }>;
 
 /**
@@ -30,7 +42,11 @@ export const getTeamById = cache(async (teamId: string): Promise<TeamWithMembers
       },
     },
     include: {
-      memberships: true,
+      memberships: {
+        include: {
+          user: true,
+        },
+      },
     },
   });
 
@@ -52,13 +68,18 @@ export const getTeamByIdUnsecure = cache(async (teamId: string): Promise<TeamWit
     redirect("/sign-in");
   }
 
-  const team = await prisma.team.findFirst({
+  return prisma.team.findFirst({
+    where: {
+      id: teamId,
+    },
     include: {
-      memberships: true,
+      memberships: {
+        include: {
+          user: true,
+        },
+      },
     },
   });
-
-  return team;
 });
 
 /**
@@ -81,7 +102,11 @@ export const getTeamsWithMemberships = cache(async (): Promise<TeamWithMembershi
       },
     },
     include: {
-      memberships: true,
+      memberships: {
+        include: {
+          user: true,
+        },
+      },
     },
     orderBy: {
       name: "asc",

@@ -1,34 +1,25 @@
+import { DangerZone } from "@/app/(secure)/team/[id]/admin/_components/delete-team";
+import { GeneralSettings } from "@/app/(secure)/team/[id]/admin/_components/general-settings";
+import { InviteLinkComponent } from "@/app/(secure)/team/[id]/admin/_components/invite-link";
+import { RoleManagement } from "@/app/(secure)/team/[id]/admin/_components/role-management";
 import { Metadata } from "next";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { getTeamById } from "@/lib/database/team";
-import { GeneralSettings } from "./_components/general-settings";
-import { NotificationSettings } from "./_components/notification-settings";
-import { UserManagement } from "./_components/user-management";
 
 export const metadata: Metadata = {
-  title: "Tableau de bord - Administration",
-  description: "Page d'administration du tableau de bord",
+  title: "Administration - Paramètres globaux",
+  description: "Gérez les paramètres globaux de votre équipe",
 };
 
 export default async function AdminPage({ params }: { params: { id: string } }) {
   const team = await getTeamById(params.id);
 
   return (
-    <div className="flex-1 space-y-8 p-8 pt-6">
-      <h1 className="flex items-center justify-between text-3xl font-bold tracking-tight">
-        {"Administration de l'équipe"}
-        <Link href={`/dashboard/${params.id}/admin/bets`} className="ml-4">
-          <Button>Gérer les paris</Button>
-        </Link>
-      </h1>
-      <div className="grid gap-8 md:grid-cols-2">
-        <div className="space-y-8">
-          <GeneralSettings team={team} />
-          <NotificationSettings teamId={params.id} />
-        </div>
-        <UserManagement teamId={params.id} />
-      </div>
+    <div className="space-y-6">
+      <h1 className="text-3xl font-bold">{"Paramètres de l'équipe"}</h1>
+      <GeneralSettings team={team} />
+      <InviteLinkComponent teamId={team.id} />
+      <RoleManagement team={team} />
+      <DangerZone teamId={team.id} />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use server";
 
 import { deleteTeamSchema, updateTeamSettingsSchema } from "@/validations/team-settings.schema";
+import { updateUserRoleSchema } from "@/validations/user-role-management.schema";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/database/db";
@@ -41,7 +42,7 @@ export const updateTeamSettings = authActionClient
           defaultHoursBet: defaultDuration,
         },
       });
-      revalidatePath(`/dashboard/${teamId}`);
+      revalidatePath(`/team`, "layout");
       return {
         success: true,
         message: `Les paramètres de l'équipe ont été mis à jour avec succès.`,
@@ -105,3 +106,56 @@ export const getInviteLink = authActionClient.schema(z.string()).action(async ({
     inviteLink: `${process.env.NEXT_PUBLIC_APP_URL}/invite/${teamId}`,
   };
 });
+
+export const updateUserRole = authActionClient
+  .schema(updateUserRoleSchema)
+  .action(async ({ parsedInput: { userId, role, teamId }, ctx: { user } }) => {
+    try {
+      const currentUserMembership = await prisma.teamMembership.findUnique({
+        where: {
+          userId_teamId: {
+            userId: user.id,
+            teamId,
+          },
+        },
+      });
+
+      if (currentUserMembership?.role !== "ADMIN") {
+        return {
+          success: false,
+          message: `Vous n'avez pas l'autorisation de modifier les rôles des utilisateurs.`,
+        };
+      }
+
+      if (userId === user.id) {
+        return {
+          success: false,
+          message: `Vous ne pouvez pas modifier votre propre rôle.`,
+        };
+      }
+
+      await prisma.teamMembership.update({
+        where: {
+          userId_teamId: {
+            userId,
+            teamId,
+          },
+        },
+        data: {
+          role,
+        },
+      });
+
+      revalidatePath(`/team/${teamId}/admin`);
+      return {
+        success: true,
+        message: `Le rôle de l'utilisateur a été mis à jour avec succès.`,
+      };
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour du rôle de l'utilisateur:", error);
+      return {
+        success: false,
+        message: `Une erreur est survenue lors de la mise à jour du rôle de l'utilisateur.`,
+      };
+    }
+  });
