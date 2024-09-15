@@ -34,5 +34,11 @@ export const editBetSchema = betSchema.extend({
   betId: z.string(),
 });
 
+export const SelectAnswerInput = z.object({
+  betId: z.string(),
+  optionId: z.string(),
+});
+
 export type CreateBetInput = z.infer<typeof createBetSchema>;
 export type EditBetInput = z.infer<typeof editBetSchema>;
+export type SelectAnswerInput = z.infer<typeof SelectAnswerInput>;

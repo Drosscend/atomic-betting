@@ -1,4 +1,4 @@
-import { EditBetForm } from "@/app/(secure)/team/[id]/admin/bets/[betId]/_components/edit-bet-form";
+import { EditBetForm } from "@/app/(secure)/team/[id]/admin/bets/[betId]/edit/_components/edit-bet-form";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getBetById } from "@/lib/database/bet";

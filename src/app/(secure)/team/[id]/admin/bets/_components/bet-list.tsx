@@ -2,6 +2,7 @@
 
 import { differenceInSeconds, format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { CheckCircleIcon } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,12 +28,20 @@ export function BetsList({ bets, teamId }: BetsListProps) {
     const elapsed = differenceInSeconds(now, bet.startDateTime);
     const progress = Math.min(100, (elapsed / totalDuration) * 100);
 
+    const correctOption = bet.questionBet?.options.find((option) => option.id === bet.questionBet?.correctOptionId);
+
     return (
       <Card key={bet.id} className="mb-4">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <span>{bet.questionBet?.question || bet.description}</span>
-            {isActive && !bet.questionBet?.correctOptionId && <Badge variant="destructive">Aucune réponse</Badge>}
+            {isActive && bet.type === "QUESTION" && !bet.questionBet?.correctOptionId && <Badge variant="destructive">{`Aucune réponse`}</Badge>}
+            {bet.type === "QUESTION" && bet.questionBet?.correctOptionId && (
+              <Badge variant="default" className="flex items-center">
+                <CheckCircleIcon className="mr-1 size-4" />
+                {`Réponse sélectionnée`}
+              </Badge>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -43,11 +52,21 @@ export function BetsList({ bets, teamId }: BetsListProps) {
               <Progress value={progress} className="w-full" />
             </div>
           )}
+          {bet.type === "QUESTION" && bet.questionBet?.correctOptionId && (
+            <p className="mt-2 font-semibold text-green-600">{`Réponse correcte : ${correctOption?.content}`}</p>
+          )}
         </CardContent>
         <CardFooter>
           {bet.startDateTime > now && (
             <Link href={`/team/${teamId}/admin/bets/${bet.id}/edit`} passHref>
-              <Button variant="outline">Modifier</Button>
+              <Button variant="outline">{`Modifier`}</Button>
+            </Link>
+          )}
+          {isActive && bet.type === "QUESTION" && !bet.questionBet?.correctOptionId && (
+            <Link href={`/team/${teamId}/admin/bets/${bet.id}/select-answer`} passHref>
+              <Button variant="outline" className="ml-2">
+                {`Sélectionner la réponse`}
+              </Button>
             </Link>
           )}
         </CardFooter>
@@ -58,9 +77,9 @@ export function BetsList({ bets, teamId }: BetsListProps) {
   return (
     <Tabs defaultValue="active" className="w-full">
       <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger value="active">En cours</TabsTrigger>
-        <TabsTrigger value="pending">En attente</TabsTrigger>
-        <TabsTrigger value="completed">Terminés</TabsTrigger>
+        <TabsTrigger value="active">{`En cours`}</TabsTrigger>
+        <TabsTrigger value="pending">{`En attente`}</TabsTrigger>
+        <TabsTrigger value="completed">{`Terminés`}</TabsTrigger>
       </TabsList>
       <TabsContent value="active">{activeBets.map((bet) => renderBetCard(bet, true))}</TabsContent>
       <TabsContent value="pending">{pendingBets.map((bet) => renderBetCard(bet))}</TabsContent>
