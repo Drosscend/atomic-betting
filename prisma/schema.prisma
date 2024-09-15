@@ -70,24 +70,82 @@ model Team {
   creatorId       String
   creator         User             @relation("TeamCreator", fields: [creatorId], references: [id])
   memberships     TeamMembership[]
+  bets            Bet[]
 
   @@map("teams")
 }
 
 model TeamMembership {
-  id        String           @id @default(cuid())
-  userId    String
-  teamId    String
-  status    MembershipStatus
-  role      MembershipRole   @default(MEMBER)
-  coins     Int              @default(0)
-  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  team      Team             @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  id              String           @id @default(cuid())
+  userId          String
+  teamId          String
+  status          MembershipStatus
+  role            MembershipRole   @default(MEMBER)
+  coins           Int              @default(0)
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team            Team             @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  betTransactions BetTransaction[]
 
   @@unique([userId, teamId])
   @@map("team_memberships")
+}
+
+model Bet {
+  id            String           @id @default(uuid())
+  type          BetType
+  startDateTime DateTime
+  endDateTime   DateTime
+  minCoins      Int
+  maxCoins      Int
+  description   String
+  teamId        String
+  team          Team             @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  transactions  BetTransaction[]
+  questionBet   QuestionBet?
+
+  @@map("bets")
+}
+
+model BetTransaction {
+  id               String         @id @default(uuid())
+  betId            String
+  bet              Bet            @relation(fields: [betId], references: [id], onDelete: Cascade)
+  teamMembershipId String
+  teamMembership   TeamMembership @relation(fields: [teamMembershipId], references: [id], onDelete: Cascade)
+  coinsAmount      Int
+  transactionDate  DateTime       @default(now())
+  odds             Float?
+
+  @@map("bet_transactions")
+}
+
+model QuestionBet {
+  id              String      @id @default(uuid())
+  betId           String      @unique
+  bet             Bet         @relation(fields: [betId], references: [id], onDelete: Cascade)
+  question        String
+  options         BetOption[]
+  correctOption   BetOption?  @relation("CorrectOption", fields: [correctOptionId], references: [id])
+  correctOptionId String?
+
+  @@map("question_bets")
+}
+
+model BetOption {
+  id             String        @id @default(uuid())
+  questionBetId  String
+  questionBet    QuestionBet   @relation(fields: [questionBetId], references: [id], onDelete: Cascade)
+  content        String
+  correctForBets QuestionBet[] @relation("CorrectOption")
+
+  @@map("bet_options")
+}
+
+enum BetType {
+  QUESTION
+  // D'autres types de paris peuvent être ajoutés ici à l'avenir
 }
 
 enum MembershipStatus {

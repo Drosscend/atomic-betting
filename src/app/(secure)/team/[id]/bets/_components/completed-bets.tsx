@@ -66,7 +66,7 @@ const completedBets: CompletedBet[] = [
   },
 ];
 
-export function CompletedBets() {
+export function CompletedBets({ teamId }: { teamId: string }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const totalPages = Math.ceil(completedBets.length / itemsPerPage);

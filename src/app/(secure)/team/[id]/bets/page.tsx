@@ -5,7 +5,7 @@ import { OngoingBets } from "./_components/ongoing-bets";
 
 export const metadata: Metadata = { title: "Dashboard +- Bets", description: "Dashboard bets page" };
 
-export default async function BetsPage() {
+export default async function BetsPage({ params }: { params: { id: string } }) {
   return (
     <div className="container mx-auto p-6">
       <h1 className="mb-6 text-3xl font-bold">Mes Paris</h1>
@@ -15,10 +15,10 @@ export default async function BetsPage() {
           <TabsTrigger value="completed">Paris terminés</TabsTrigger>
         </TabsList>
         <TabsContent value="ongoing">
-          <OngoingBets />
+          <OngoingBets teamId={params.id} />
         </TabsContent>
         <TabsContent value="completed">
-          <CompletedBets />
+          <CompletedBets teamId={params.id} />
         </TabsContent>
       </Tabs>
     </div>
