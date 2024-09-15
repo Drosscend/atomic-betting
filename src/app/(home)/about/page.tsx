@@ -41,9 +41,6 @@ export default function AboutPage() {
       <p className="leading-7 [&:not(:first-child)]:mt-6">
         {`Au fil du développement de l'application, nous nous sommes rendus compte que ce concept avait le potentiel d'être apprécié par un public plus large. Pourquoi garder pour nous ce qui pourrait divertir et rassembler tant d'autres personnes ? C'est avec cet esprit de partage et d'amusement que nous avons décidé de lancer Atomic Betting pour tous.`}
       </p>
-      <p className="leading-7 [&:not(:first-child)]:mt-6">
-        {`Aujourd'hui, notre petite idée née sur les bancs de l'école s'est transformée en une startup dynamique, dédiée à offrir une expérience de paris virtuels amusante et sans risque à tous ceux qui cherchent à pimenter leur quotidien ou à renforcer leurs liens sociaux.`}
-      </p>
 
       <h2 className="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">{`Notre mission`}</h2>
       <p className="leading-7 [&:not(:first-child)]:mt-6">

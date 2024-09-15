@@ -3,7 +3,7 @@
 import { useTeam } from "@/contexts/team-context";
 import { HomeIcon, PlusCircle, UserPlus } from "lucide-react";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { JoinTeamDialog } from "@/components/join-team-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -15,12 +15,14 @@ export function TeamSwitcher() {
   const { selectedTeamId, setSelectedTeamId } = useTeam();
   const { data: session } = useSession();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const router = useRouter();
 
   const teams = useMemo(() => session?.user?.teams || [], [session?.user?.teams]);
   const selectedTeam = useMemo(() => teams.find((team) => team.teamId === selectedTeamId), [teams, selectedTeamId]);
 
   const handleSelectChange = (value: string) => {
-    if (value === "dashboard" || value === "new-team") {
+    if (value === "dashboard" || value === "team/new-team") {
+      router.push(`/${value}`);
       return;
     }
     if (value === "join-team") {
@@ -63,22 +65,18 @@ export function TeamSwitcher() {
           </SelectGroup>
           <Separator className="my-2" />
           <SelectGroup>
-            <Link href="/dashboard" passHref>
-              <SelectItem value="dashboard" className="cursor-pointer">
-                <div className="flex items-center">
-                  <HomeIcon className="mr-2 size-4" />
-                  Tableau de bord
-                </div>
-              </SelectItem>
-            </Link>
-            <Link href="/team/new-team" passHref>
-              <SelectItem value="new-team" className="cursor-pointer">
-                <div className="flex items-center">
-                  <PlusCircle className="mr-2 size-4" />
-                  Créer une équipe
-                </div>
-              </SelectItem>
-            </Link>
+            <SelectItem value="dashboard" className="cursor-pointer">
+              <div className="flex items-center">
+                <HomeIcon className="mr-2 size-4" />
+                Tableau de bord
+              </div>
+            </SelectItem>
+            <SelectItem value="team/new-team" className="cursor-pointer">
+              <div className="flex items-center">
+                <PlusCircle className="mr-2 size-4" />
+                Créer une équipe
+              </div>
+            </SelectItem>
             <SelectItem value="join-team" className="cursor-pointer">
               <div className="flex items-center">
                 <UserPlus className="mr-2 size-4" />

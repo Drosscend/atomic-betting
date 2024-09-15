@@ -114,7 +114,7 @@ export function CurrentBet() {
             )}
           </CardContent>
           <CardFooter>
-            <Link href={`/dashboard/${selectedTeamId}/bets/${bet.id}`} passHref className="w-full">
+            <Link href={`/team/${selectedTeamId}/bets/${bet.id}`} passHref className="w-full">
               <Button className="w-full">{bet.userBetAmount !== null ? "Voir les détails du pari" : "Placer un pari"}</Button>
             </Link>
           </CardFooter>

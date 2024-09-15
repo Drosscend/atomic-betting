@@ -73,7 +73,7 @@ export const updateUserCoins = authActionClient
         data: { coins },
       });
 
-      revalidatePath(`/dashboard/${teamId}`);
+      revalidatePath(`/team/${teamId}`);
       return {
         success: true,
         message: `Les jetons de l'utilisateur ont été mis à jour avec succès.`,

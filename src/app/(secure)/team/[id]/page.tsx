@@ -98,7 +98,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>{"Paris en cours"}</CardTitle>
-                  <Link href={`/dashboard/${params.id}/bets`} passHref>
+                  <Link href={`/team/${params.id}/bets`} passHref>
                     <Button variant="outline">Voir tous les paris en cours</Button>
                   </Link>
                 </div>
