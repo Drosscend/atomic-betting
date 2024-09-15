@@ -16,9 +16,11 @@ export function Hero() {
             <Link href={"/sign-in"}>
               <Button size="lg">{"Commencer"}</Button>
             </Link>
-            <Button size="lg" variant="outline">
-              {"En savoir plus"}
-            </Button>
+            <Link href={"/features"}>
+              <Button size="lg" variant="outline">
+                {"En savoir plus"}
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

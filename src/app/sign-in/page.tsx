@@ -45,7 +45,7 @@ export default function Page({ searchParams }: { searchParams: { error: SignInPa
         <CardFooter className="flex justify-center">
           <p className="text-muted-foreground text-center text-sm">
             {`En vous connectant, vous acceptez nos `}
-            <a href="#" className="hover:text-primary underline">
+            <a href="/policies/terms" className="hover:text-primary underline">
               {`conditions d'utilisation`}
             </a>
           </p>

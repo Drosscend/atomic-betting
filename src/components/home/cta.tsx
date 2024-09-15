@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -13,10 +14,9 @@ export function Cta() {
             </p>
           </div>
           <div className="w-full max-w-sm space-y-2">
-            <form className="flex flex-col space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0">
-              <Input className="max-w-lg flex-1" placeholder="Entrez votre email" type="email" />
-              <Button type="submit">{"S'inscrire"}</Button>
-            </form>
+            <Link href={"/sign-in"}>
+              <Button size="lg">{"Commencer"}</Button>
+            </Link>
           </div>
         </div>
       </div>

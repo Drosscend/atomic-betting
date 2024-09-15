@@ -74,8 +74,7 @@ export const deleteTeam = authActionClient
       };
     }
 
-    const membership = team.memberships.find((m) => m.userId === user.id);
-    if (!membership || membership.role !== "ADMIN") {
+    if (team.creatorId !== user.id) {
       return {
         success: false,
         message: `Vous n'êtes pas autorisé à supprimer l'équipe.`,
