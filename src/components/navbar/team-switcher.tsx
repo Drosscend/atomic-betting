@@ -30,6 +30,7 @@ export function TeamSwitcher() {
       return;
     }
     setSelectedTeamId(value);
+    router.push(`/team/${value}`);
   };
 
   return (
