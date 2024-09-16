@@ -1,4 +1,4 @@
-import { CreateBetForm } from "@/app/(secure)/team/[id]/admin/bets/create/_components/bet-form";
+import { CreateBetForm } from "@/app/(secure)/team/[id]/admin/bets/create/_components/create-bet-form";
 import type { Metadata } from "next";
 import { getTeamById } from "@/lib/database/team";
 

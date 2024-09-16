@@ -3,25 +3,19 @@
 import { editBet } from "@/app/(secure)/team/[id]/admin/bets/[betId]/edit-bet.action";
 import { EditBetInput, editBetSchema } from "@/validations/bet.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
-import { fr } from "date-fns/locale";
-import { CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { DateTimePicker } from "@/components/forms/date-time-picker.form";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import type { BetWithTransactions } from "@/lib/database/bet";
 import type { TeamWithMemberships } from "@/lib/database/team";
-import { cn } from "@/lib/utils";
 
 export function EditBetForm({ team, bet }: { team: TeamWithMemberships; bet: BetWithTransactions }) {
   const router = useRouter();
@@ -104,104 +98,38 @@ export function EditBetForm({ team, bet }: { team: TeamWithMemberships; bet: Bet
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="startDateTime"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>{`Date et heure de début`}</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button variant={"outline"} className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}>
-                          {field.value ? format(field.value, "Pp", { locale: fr }) : <span>{`Choisir une date et une heure`}</span>}
-                          <CalendarIcon className="ml-auto size-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
-                      <div className="border-t p-3">
-                        <Input
-                          type="time"
-                          value={format(field.value, "HH:mm")}
-                          onChange={(e) => {
-                            const [hours, minutes] = e.target.value.split(":");
-                            const newDate = new Date(field.value);
-                            newDate.setHours(parseInt(hours, 10));
-                            newDate.setMinutes(parseInt(minutes, 10));
-                            field.onChange(newDate);
-                          }}
-                        />
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="endDateTime"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>{`Date et heure de fin`}</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button variant={"outline"} className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}>
-                          {field.value ? format(field.value, "Pp", { locale: fr }) : <span>{`Choisir une date et une heure`}</span>}
-                          <CalendarIcon className="ml-auto size-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
-                      <div className="border-t p-3">
-                        <Input
-                          type="time"
-                          value={format(field.value, "HH:mm")}
-                          onChange={(e) => {
-                            const [hours, minutes] = e.target.value.split(":");
-                            const newDate = new Date(field.value);
-                            newDate.setHours(parseInt(hours, 10));
-                            newDate.setMinutes(parseInt(minutes, 10));
-                            field.onChange(newDate);
-                          }}
-                        />
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="minCoins"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{`Mise minimum (jetons)`}</FormLabel>
-                  <FormControl>
-                    <Input type="number" {...field} onChange={(e) => field.onChange(parseInt(e.target.value))} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="maxCoins"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{`Mise maximum (jetons)`}</FormLabel>
-                  <FormControl>
-                    <Input type="number" {...field} onChange={(e) => field.onChange(parseInt(e.target.value))} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex flex-col space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0">
+              <DateTimePicker control={form.control} name="startDateTime" label={`Date et heure de début`} minDate={new Date()} />
+              <DateTimePicker control={form.control} name="endDateTime" label={`Date et heure de fin`} minDate={form.watch("startDateTime")} />
+            </div>
+            <div className="flex flex-col space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0">
+              <FormField
+                control={form.control}
+                name="minCoins"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>{`Mise minimum (Atomic Coins)`}</FormLabel>
+                    <FormControl>
+                      <Input type="number" {...field} onChange={(e) => field.onChange(parseInt(e.target.value))} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="maxCoins"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>{`Mise maximum (Atomic Coins)`}</FormLabel>
+                    <FormControl>
+                      <Input type="number" {...field} onChange={(e) => field.onChange(parseInt(e.target.value))} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
               name="description"
