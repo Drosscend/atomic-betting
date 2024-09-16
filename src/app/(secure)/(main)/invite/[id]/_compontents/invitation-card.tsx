@@ -89,7 +89,7 @@ export function InvitationCard({ teamId, teamName }: InvitationCardProps) {
       <CardFooter className="flex flex-col items-center justify-center space-y-4">
         {renderJoinButton()}
         {renderStatusMessage()}
-        <Link href="/dashboard" passHref>
+        <Link href="/team" passHref>
           <Button variant="outline">{`Aller au tableau de bord`}</Button>
         </Link>
       </CardFooter>

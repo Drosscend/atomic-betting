@@ -23,7 +23,7 @@ export function MainNav({ className, ...props }: MainNavProps) {
 
   return (
     <nav className={cn("flex items-center space-x-4 lg:space-x-6", className)} {...props}>
-      <NavLink href={`/team/${selectedTeamId}`}>Dashboard</NavLink>
+      <NavLink href={`/team/${selectedTeamId}`}>Tableau de bord</NavLink>
       {isAdminOrManager && <NavLink href={`/team/${selectedTeamId}/admin`}>Administration</NavLink>}
     </nav>
   );

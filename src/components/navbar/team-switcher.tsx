@@ -21,7 +21,7 @@ export function TeamSwitcher() {
   const selectedTeam = useMemo(() => teams.find((team) => team.teamId === selectedTeamId), [teams, selectedTeamId]);
 
   const handleSelectChange = (value: string) => {
-    if (value === "dashboard" || value === "team/new-team") {
+    if (value === "team" || value === "team/new-team") {
       router.push(`/${value}`);
       return;
     }
@@ -66,7 +66,7 @@ export function TeamSwitcher() {
           </SelectGroup>
           <Separator className="my-2" />
           <SelectGroup>
-            <SelectItem value="dashboard" className="cursor-pointer">
+            <SelectItem value="team" className="cursor-pointer">
               <div className="flex items-center">
                 <HomeIcon className="mr-2 size-4" />
                 Tableau de bord

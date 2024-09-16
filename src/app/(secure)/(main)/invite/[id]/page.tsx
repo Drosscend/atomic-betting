@@ -25,7 +25,7 @@ export default async function InvitationPage({ params }: { params: { id: string 
           title="Équipe non trouvée"
           message="Désolé, nous n'avons pas pu trouver l'équipe correspondant à cette invitation."
           buttonText="Aller au tableau de bord"
-          buttonHref="/dashboard"
+          buttonHref="/team"
         />
       )}
     </div>

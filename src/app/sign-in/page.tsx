@@ -22,7 +22,7 @@ export default function Page({ searchParams }: { searchParams: { error: SignInPa
           <form
             action={async () => {
               "use server";
-              await signIn("github", { redirectTo: "/dashboard" });
+              await signIn("github", { redirectTo: "/team" });
             }}
           >
             <Button type="submit" className="w-full">

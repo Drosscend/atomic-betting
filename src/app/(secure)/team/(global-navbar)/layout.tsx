@@ -26,7 +26,7 @@ export default async function Layout({
           </div>
         </div>
       </div>
-      <main>{children}</main>
+      <div>{children}</div>
     </div>
   );
 }
