@@ -65,46 +65,6 @@ export const getTeamBets = cache(async (teamId: string): Promise<BetWithTransact
 });
 
 /**
- * Retrieves all bets for a specific team on a given day.
- * @param teamId The ID of the team
- * @param date The date to filter bets
- * @returns An array of bets with their transactions and question details
- */
-export const getTeamBetsForDay = cache(async (teamId: string, date: Date): Promise<BetWithTransactions[]> => {
-  const startOfDay = new Date(date);
-  startOfDay.setHours(0, 0, 0, 0);
-  const endOfDay = new Date(date);
-  endOfDay.setHours(23, 59, 59, 999);
-
-  return prisma.bet.findMany({
-    where: {
-      teamId,
-      startDateTime: {
-        gte: startOfDay,
-        lte: endOfDay,
-      },
-    },
-    include: {
-      transactions: {
-        include: {
-          teamMembership: {
-            include: {
-              user: true,
-            },
-          },
-        },
-      },
-      questionBet: {
-        include: {
-          options: true,
-        },
-      },
-    },
-    orderBy: { startDateTime: "asc" },
-  });
-});
-
-/**
  * Retrieves all bets a user has participated in for a specific team.
  * @param userId The ID of the user
  * @param teamId The ID of the team

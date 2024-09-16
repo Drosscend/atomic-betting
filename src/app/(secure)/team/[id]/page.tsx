@@ -1,4 +1,4 @@
-import { CurrentBet } from "@/app/(secure)/team/[id]/_components/current-bet";
+import { CurrentBets } from "@/app/(secure)/team/[id]/_components/current-bets";
 import { RecentBet } from "@/app/(secure)/team/[id]/_components/recent-bet";
 import { format } from "date-fns/format";
 import { fr } from "date-fns/locale";
@@ -109,7 +109,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                 </div>
               </CardHeader>
               <CardContent>
-                <CurrentBet activeBets={activeBets} userId={user.id} />
+                <CurrentBets activeBets={activeBets} userId={user.id} />
               </CardContent>
             </Card>
             <Card className="col-span-1 md:col-span-2 lg:col-span-2">

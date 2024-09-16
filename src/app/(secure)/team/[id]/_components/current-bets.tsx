@@ -1,23 +1,21 @@
-import { format, formatDistance } from "date-fns";
+import { differenceInSeconds, format, formatDistance } from "date-fns";
 import { fr } from "date-fns/locale";
 import Link from "next/link";
 import { IncrementNumber } from "@/components/increment-number";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import type { BetWithTransactions } from "@/lib/database/bet";
+import { formatTimeLeft } from "@/lib/utils.date";
 
 interface CurrentBetProps {
   activeBets: BetWithTransactions[];
   userId: string;
 }
 
-export function CurrentBet({ activeBets, userId }: CurrentBetProps) {
-  const formatTimeLeft = (endDate: Date) => {
-    const now = new Date();
-    if (now > endDate) return "Expiré";
-    return formatDistance(endDate, now, { locale: fr, addSuffix: true });
-  };
+export function CurrentBets({ activeBets, userId }: CurrentBetProps) {
+  const now = new Date();
 
   if (activeBets && activeBets.length === 0) {
     return (
@@ -34,6 +32,10 @@ export function CurrentBet({ activeBets, userId }: CurrentBetProps) {
       {activeBets.map((bet) => {
         const userTransaction = bet.transactions.find((t) => t.teamMembership.userId === userId);
         const totalBetAmount = bet.transactions.reduce((sum, t) => sum + t.coinsAmount, 0);
+
+        const totalDuration = differenceInSeconds(bet.endDateTime, bet.startDateTime);
+        const elapsed = differenceInSeconds(now, bet.startDateTime);
+        const progress = Math.min(100, (elapsed / totalDuration) * 100);
 
         return (
           <Card key={bet.id}>
@@ -62,6 +64,9 @@ export function CurrentBet({ activeBets, userId }: CurrentBetProps) {
                     {` A.c.`}
                   </p>
                 </div>
+              </div>
+              <div className="mt-2">
+                <Progress value={progress} className="w-full" />
               </div>
               {userTransaction ? (
                 <div className="mt-4">

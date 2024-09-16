@@ -4,12 +4,14 @@ import { differenceInSeconds, format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { CheckCircleIcon } from "lucide-react";
 import Link from "next/link";
+import { IncrementNumber } from "@/components/increment-number";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { BetWithTransactions } from "@/lib/database/bet";
+import { formatTimeLeft } from "@/lib/utils.date";
 
 interface BetsListProps {
   bets: BetWithTransactions[];
@@ -24,10 +26,12 @@ export function BetsList({ bets, teamId }: BetsListProps) {
   const completedBets = bets.filter((bet) => bet.endDateTime <= now);
 
   const renderBetCard = (bet: BetWithTransactions, isActive: boolean = false) => {
+    const totalBetAmount = bet.transactions.reduce((sum, t) => sum + t.coinsAmount, 0);
+
+    const now = new Date();
     const totalDuration = differenceInSeconds(bet.endDateTime, bet.startDateTime);
     const elapsed = differenceInSeconds(now, bet.startDateTime);
     const progress = Math.min(100, (elapsed / totalDuration) * 100);
-
     const correctOption = bet.questionBet?.options.find((option) => option.id === bet.questionBet?.correctOptionId);
 
     return (
@@ -45,8 +49,28 @@ export function BetsList({ bets, teamId }: BetsListProps) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p>{`Début: ${format(bet.startDateTime, "dd MMMM yyyy à HH:mm", { locale: fr })}`}</p>
-          <p>{`Fin: ${format(bet.endDateTime, "dd MMMM yyyy à HH:mm", { locale: fr })}`}</p>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-sm font-medium">{`Date de début`}</p>
+              <p className="text-muted-foreground text-sm">{format(bet.startDateTime, "dd MMMM yyyy à H:mm", { locale: fr })}</p>
+            </div>
+            <div>
+              <p className="text-sm font-medium">{`Date de fin`}</p>
+              <p className="text-muted-foreground text-sm">{format(bet.endDateTime, "dd MMMM yyyy à H:mm", { locale: fr })}</p>
+            </div>
+            <div>
+              <p className="text-sm font-medium">{`Temps restant`}</p>
+              <p className="text-muted-foreground text-sm">{formatTimeLeft(bet.endDateTime)}</p>
+            </div>
+            <div>
+              <p className="text-sm font-medium">{`Montant total des paris`}</p>
+              <p className="text-muted-foreground text-sm">
+                {`Montant: `}
+                <IncrementNumber end={totalBetAmount} duration={1000} />
+                {` A.c.`}
+              </p>
+            </div>
+          </div>
           {isActive && (
             <div className="mt-2">
               <Progress value={progress} className="w-full" />
