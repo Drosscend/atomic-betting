@@ -21,8 +21,8 @@ interface BetsListProps {
 export function BetsList({ bets, teamId }: BetsListProps) {
   const now = new Date();
 
-  const activeBets = bets.filter((bet) => bet.startDateTime <= now && bet.endDateTime > now);
-  const pendingBets = bets.filter((bet) => bet.startDateTime > now);
+  const activeBets = bets.filter((bet) => bet.startDateTime < now && bet.endDateTime > now);
+  const pendingBets = bets.filter((bet) => bet.startDateTime >= now);
   const completedBets = bets.filter((bet) => bet.endDateTime <= now);
 
   const renderBetCard = (bet: BetWithTransactions, isActive: boolean = false) => {

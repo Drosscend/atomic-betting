@@ -33,7 +33,7 @@ export default function Page({ searchParams }: { searchParams: { error: SignInPa
           <form
             action={async () => {
               "use server";
-              await signIn("discord", { redirectTo: "/dashboard" });
+              await signIn("discord", { redirectTo: "/team" });
             }}
           >
             <Button type="submit" className="w-full">

@@ -15,7 +15,11 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-export function DangerZone({ teamId }: { teamId: string }) {
+interface DangerZoneProps {
+  teamId: string;
+  isAdmin: boolean;
+}
+export function DangerZone({ teamId, isAdmin }: DangerZoneProps) {
   const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
@@ -54,7 +58,7 @@ export function DangerZone({ teamId }: { teamId: string }) {
         <p className="text-muted-foreground mb-4 text-sm">
           {`La suppression de l'équipe est une action irréversible. Toutes les données associées seront perdues.`}
         </p>
-        <Button variant="destructive" onClick={() => setIsDeleteDialogOpen(true)}>
+        <Button variant="destructive" onClick={() => setIsDeleteDialogOpen(true)} disabled={!isAdmin}>
           <TrashIcon className="mr-2 size-4" />
           {`Supprimer l'équipe`}
         </Button>

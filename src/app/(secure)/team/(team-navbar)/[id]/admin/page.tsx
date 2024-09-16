@@ -3,6 +3,8 @@ import { GeneralSettings } from "@/app/(secure)/team/(team-navbar)/[id]/admin/_c
 import { InviteLinkComponent } from "@/app/(secure)/team/(team-navbar)/[id]/admin/_components/invite-link";
 import { RoleManagement } from "@/app/(secure)/team/(team-navbar)/[id]/admin/_components/role-management";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
 import { getTeamById } from "@/lib/database/team";
 
 export const metadata: Metadata = {
@@ -12,14 +14,19 @@ export const metadata: Metadata = {
 
 export default async function AdminPage({ params }: { params: { id: string } }) {
   const team = await getTeamById(params.id);
+  const session = await auth();
+  if (!session) {
+    redirect("/sign-in");
+  }
+  const isAdmin = !!team.memberships.find((m) => m.userId === session.user.id && m.role === "ADMIN");
 
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">{"Paramètres de l'équipe"}</h1>
       <GeneralSettings team={team} />
       <InviteLinkComponent teamId={team.id} />
-      <RoleManagement team={team} />
-      <DangerZone teamId={team.id} />
+      <RoleManagement team={team} isAdmin={isAdmin} />
+      <DangerZone teamId={team.id} isAdmin={isAdmin} />
     </div>
   );
 }

@@ -2,7 +2,6 @@ import { EditBetForm } from "@/app/(secure)/team/(team-navbar)/[id]/admin/bets/[
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getBetById } from "@/lib/database/bet";
-import { prisma } from "@/lib/database/db";
 import { getTeamById } from "@/lib/database/team";
 
 export const metadata: Metadata = {

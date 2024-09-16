@@ -11,7 +11,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { MembershipsWithUsers, TeamWithMemberships } from "@/lib/database/team";
 
-export function RoleManagement({ team }: { team: TeamWithMemberships }) {
+interface RoleManagementProps {
+  team: TeamWithMemberships;
+  isAdmin: boolean;
+}
+export function RoleManagement({ team, isAdmin }: RoleManagementProps) {
   const [localUsers, setLocalUsers] = useState<MembershipsWithUsers[]>(team.memberships);
 
   const { execute: executeUpdateRole, hasSucceeded } = useAction(updateUserRole, {
@@ -61,7 +65,11 @@ export function RoleManagement({ team }: { team: TeamWithMemberships }) {
                 <TableCell>{membership.user.name}</TableCell>
                 <TableCell>{membership.user.email}</TableCell>
                 <TableCell>
-                  <Select value={membership.role} onValueChange={(value: MembershipRole) => handleRoleChange(membership.userId, value)}>
+                  <Select
+                    value={membership.role}
+                    onValueChange={(value: MembershipRole) => handleRoleChange(membership.userId, value)}
+                    disabled={!isAdmin}
+                  >
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder={`Sélectionner un rôle`} />
                     </SelectTrigger>
