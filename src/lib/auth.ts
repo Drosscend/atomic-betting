@@ -11,6 +11,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [GitHub, Discord],
   pages: {
     signIn: "/sign-in",
+    newUser: "/welcome",
   },
   session: {
     strategy: "database",
