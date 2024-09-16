@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { auth } from "@/lib/auth";
 
-export function Hero() {
+export async function Hero() {
+  const session = await auth();
   return (
     <section className="from-primary/20 to-background flex h-screen items-center justify-center bg-gradient-to-b">
       <div className="container mx-auto px-4 md:px-6">
@@ -13,8 +15,8 @@ export function Hero() {
             </p>
           </div>
           <div className="space-x-4">
-            <Link href={"/sign-in"}>
-              <Button size="lg">{"Commencer"}</Button>
+            <Link href={session?.user ? "/team" : "/sign-in"}>
+              <Button size="lg">{session?.user ? "Tableau de bord" : "Commencer"}</Button>
             </Link>
             <Link href={"/features"}>
               <Button size="lg" variant="outline">
