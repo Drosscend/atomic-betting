@@ -13,6 +13,9 @@ declare module "next-auth" {
         coins: number;
       }[];
     } & DefaultSession["user"];
+    id: string;
+    sessionToken: string;
+    userId: string;
   }
 
   interface User {

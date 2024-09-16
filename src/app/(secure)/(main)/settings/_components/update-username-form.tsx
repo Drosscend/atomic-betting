@@ -4,7 +4,6 @@ import { updateUsername } from "@/app/(secure)/(main)/settings/actions";
 import { UpdateUsernameInput, updateUsernameSchema } from "@/validations/user-settings.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { User } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useAction } from "next-safe-action/hooks";
 import { useForm } from "react-hook-form";
@@ -12,9 +11,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import type { UserFull } from "@/lib/database/user";
 
 interface UpdateUsernameFormProps {
-  user: User;
+  user: UserFull;
 }
 
 export function UpdateUsernameForm({ user }: UpdateUsernameFormProps) {

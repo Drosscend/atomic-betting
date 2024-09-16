@@ -1,6 +1,6 @@
 "use server";
 
-import { deleteAccountSchema, updateUsernameSchema } from "@/validations/user-settings.schema";
+import { deleteAccountSchema, deleteSessionSchema, updateUsernameSchema } from "@/validations/user-settings.schema";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/database/db";
 import { authActionClient } from "@/lib/safe-action";
@@ -57,6 +57,37 @@ export const deleteAccount = authActionClient.schema(deleteAccountSchema).action
     return {
       success: false,
       message: `Une erreur est survenue lors de la suppression de votre compte.`,
+    };
+  }
+});
+
+export const deleteSession = authActionClient.schema(deleteSessionSchema).action(async ({ parsedInput: { sessionId }, ctx: { user } }) => {
+  try {
+    const session = await prisma.session.findUnique({
+      where: { id: sessionId, userId: user.id },
+    });
+
+    if (!session) {
+      return {
+        success: false,
+        message: `La session n'existe pas ou ne vous appartient pas.`,
+      };
+    }
+
+    await prisma.session.delete({
+      where: { id: sessionId },
+    });
+
+    revalidatePath("/settings");
+    return {
+      success: true,
+      message: `La session a été supprimée avec succès.`,
+    };
+  } catch (error) {
+    console.error("Erreur lors de la suppression de la session:", error);
+    return {
+      success: false,
+      message: `Une erreur est survenue lors de la suppression de la session.`,
     };
   }
 });

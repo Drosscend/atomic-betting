@@ -11,5 +11,10 @@ export const deleteAccountSchema = z.object({
   confirmation: z.literal("confirmer", { errorMap: () => ({ message: `Veuillez saisir 'confirmer' pour supprimer votre compte.` }) }),
 });
 
+export const deleteSessionSchema = z.object({
+  sessionId: z.string(),
+});
+
 export type UpdateUsernameInput = z.infer<typeof updateUsernameSchema>;
 export type DeleteAccountInput = z.infer<typeof deleteAccountSchema>;
+export type DeleteSessionInput = z.infer<typeof deleteSessionSchema>;
