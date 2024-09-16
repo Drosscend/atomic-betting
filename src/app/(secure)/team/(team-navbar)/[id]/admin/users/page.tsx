@@ -1,5 +1,5 @@
-import { PendingInvitationsManagement } from "@/app/(secure)/team/[id]/admin/users/_components/pending-invitations-management";
-import { UserManagement } from "@/app/(secure)/team/[id]/admin/users/_components/user-management";
+import { PendingInvitationsManagement } from "@/app/(secure)/team/(team-navbar)/[id]/admin/users/_components/pending-invitations-management";
+import { UserManagement } from "@/app/(secure)/team/(team-navbar)/[id]/admin/users/_components/user-management";
 import { Metadata } from "next";
 import { getTeamById } from "@/lib/database/team";
 

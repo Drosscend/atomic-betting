@@ -1,4 +1,4 @@
-import { CreateTeamForm } from "@/app/(secure)/team/new-team/_components/create-team-form";
+import { CreateTeamForm } from "@/app/(secure)/team/(global-navbar)/new-team/_components/create-team-form";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Nouvelle équipe", description: "Créer une nouvelle équipe" };
