@@ -21,6 +21,17 @@ export type MembershipsWithUsers = Prisma.TeamMembershipGetPayload<{
 }>;
 
 /**
+ * Get all teams.
+ */
+export const getTeams = cache(async () => {
+  return prisma.team.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
+});
+
+/**
  * Get a team by its ID.
  * @param teamId The team ID.
  * @returns The team with its users.

@@ -10,7 +10,10 @@ import "./globals.css";
 const heebo = Heebo({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Atomic Betting",
+  title: {
+    default: "Atomic Bet",
+    template: "%s | Atomic Bet",
+  },
   description: "Betting on the atomic level.",
 };
 

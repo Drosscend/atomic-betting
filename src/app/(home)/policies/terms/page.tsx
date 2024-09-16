@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Atomic Betting - Conditions d'utilisation",
+  title: "Conditions d'utilisation",
   description: "Conditions d'utilisation de Atomic Betting",
 };
 export default function TermsPage() {

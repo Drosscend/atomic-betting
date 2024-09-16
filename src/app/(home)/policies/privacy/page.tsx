@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Atomic Betting - Politique de confidentialité",
+  title: "Politique de confidentialité",
   description: "Politique de confidentialité de Atomic Betting",
 };
 export default function PrivacyPolicyPage() {

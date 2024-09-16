@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export const metadata: Metadata = {
-  title: "Atomic Betting - À propos",
+  title: "À propos",
   description: "Découvrez l'histoire et la mission d'Atomic Betting",
 };
 
