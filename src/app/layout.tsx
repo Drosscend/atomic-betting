@@ -3,6 +3,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Heebo } from "next/font/google";
 import type { ReactNode } from "react";
+import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
@@ -25,6 +26,7 @@ export default function RootLayout({
           <SpeedInsights />
           <Analytics />
           {children}
+          <TailwindIndicator />
         </ThemeProvider>
       </body>
     </html>

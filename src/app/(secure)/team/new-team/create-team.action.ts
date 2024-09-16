@@ -18,6 +18,7 @@ export const createTeam = authActionClient.schema(createTeamSchema).action(async
         memberships: {
           create: {
             userId: user.id,
+            coins: parsedInput.defaultCoins,
             role: MembershipRole.ADMIN,
             status: MembershipStatus.APPROVED,
           },

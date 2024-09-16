@@ -35,7 +35,7 @@ export function CreateTeamForm() {
       if (result.data && result.data.success && result.data.teamId) {
         toast(result.data.message);
         setSelectedTeamId(result.data.teamId);
-        router.push(`/team/${result.data.teamId}`);
+        router.push(`/dashboard`);
       } else {
         toast(`Une erreur est survenue : ${result.data?.message || "Erreur inconnue"}`);
       }

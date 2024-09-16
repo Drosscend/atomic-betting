@@ -23,7 +23,7 @@ export function DeleteAccountForm() {
   });
 
   const { execute, status } = useAction(deleteAccount, {
-    onSuccess: (result) => {
+    onSuccess: async (result) => {
       if (result.data && result.data.success) {
         toast(result.data.message);
         router.push("/");
