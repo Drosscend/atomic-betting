@@ -14,14 +14,7 @@ import { auth } from "@/lib/auth";
 import { getActiveTeamBets, getUserBetsForTeam } from "@/lib/database/bet";
 import { getTeamById, getTeams } from "@/lib/database/team";
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const id = params.id;
-  const team = await getTeamById(id);
-  return {
-    title: team.name,
-    description: `Tableau de bord de l'équipe ${team.name}`,
-  };
-}
+export const metadata: Metadata = { title: "Dashboard", description: "Dashboard page" };
 
 export async function generateStaticParams() {
   const teams = await getTeams();
