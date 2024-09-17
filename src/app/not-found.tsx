@@ -2,7 +2,7 @@
 
 import { AlertTriangleIcon, LockIcon, SearchIcon } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -27,7 +27,11 @@ const funnyMessages = [
 ];
 
 export default function NotFoundPage() {
-  const [funnyMessage] = useState(() => funnyMessages[Math.floor(Math.random() * funnyMessages.length)]);
+  const [funnyMessage, setFunnyMessage] = useState(funnyMessages[0]);
+
+  useEffect(() => {
+    setFunnyMessage(funnyMessages[Math.floor(Math.random() * funnyMessages.length)]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100 py-12">

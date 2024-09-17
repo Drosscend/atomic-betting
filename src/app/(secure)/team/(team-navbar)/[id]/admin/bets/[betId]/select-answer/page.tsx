@@ -1,12 +1,11 @@
 import { SelectAnswerForm } from "@/app/(secure)/team/(team-navbar)/[id]/admin/bets/[betId]/select-answer/_components/select-answer-form";
-import { notFound } from "next/navigation";
 import { getBetById } from "@/lib/database/bet";
 
 export default async function SelectAnswerPage({ params }: { params: { id: string; betId: string } }) {
   const bet = await getBetById(params.betId);
 
-  if (!bet || bet.type !== "QUESTION") {
-    notFound();
+  if (bet.type !== "QUESTION") {
+    throw new Error("This bet is not a question bet, and for now is not supported");
   }
 
   return (

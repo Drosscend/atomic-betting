@@ -12,17 +12,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { auth } from "@/lib/auth";
 import { getActiveTeamBets, getUserBetsForTeam } from "@/lib/database/bet";
-import { getTeamById, getTeams } from "@/lib/database/team";
+import { getTeamById } from "@/lib/database/team";
 
 export const metadata: Metadata = { title: "Dashboard", description: "Dashboard page" };
-
-export async function generateStaticParams() {
-  const teams = await getTeams();
-
-  return teams.map((team) => ({
-    id: team.id,
-  }));
-}
 
 export default async function Page({ params }: { params: { id: string } }) {
   const team = await getTeamById(params.id);
