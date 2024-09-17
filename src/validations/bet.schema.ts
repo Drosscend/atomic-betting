@@ -45,6 +45,13 @@ export const SelectAnswerInput = z.object({
   optionId: z.string(),
 });
 
+export const placeBetSchema = z.object({
+  betId: z.string(),
+  optionId: z.string().min(1, { message: "Veuillez sélectionner une option" }),
+  coinsAmount: z.number().int().positive({ message: "Le montant doit être supérieur à 0" }),
+});
+
 export type CreateBetInput = z.infer<typeof createBetSchema>;
 export type EditBetInput = z.infer<typeof editBetSchema>;
 export type SelectAnswerInput = z.infer<typeof SelectAnswerInput>;
+export type PlaceBetInput = z.infer<typeof placeBetSchema>;

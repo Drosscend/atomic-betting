@@ -105,9 +105,9 @@ export function BetsList({ bets, teamId }: BetsListProps) {
         <TabsTrigger value="pending">{`En attente`}</TabsTrigger>
         <TabsTrigger value="completed">{`Terminés`}</TabsTrigger>
       </TabsList>
-      <TabsContent value="active">{activeBets.map((bet) => renderBetCard(bet, true))}</TabsContent>
+      <TabsContent value="active">{activeBets.map((bet) => renderBetCard(bet))}</TabsContent>
       <TabsContent value="pending">{pendingBets.map((bet) => renderBetCard(bet))}</TabsContent>
-      <TabsContent value="completed">{completedBets.map((bet) => renderBetCard(bet))}</TabsContent>
+      <TabsContent value="completed">{completedBets.map((bet) => renderBetCard(bet, true))}</TabsContent>
     </Tabs>
   );
 }

@@ -7,6 +7,7 @@ import { addHours, addMinutes } from "date-fns";
 import { toast } from "sonner";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { DateTimePicker } from "@/components/forms/date-time-picker.form";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ import type { TeamWithMemberships } from "@/lib/database/team";
 
 export function CreateBetForm({ team }: { team: TeamWithMemberships }) {
   const router = useRouter();
+  const questionPlaceholder = useMemo(() => getRandomQuestionPlaceholder(), []);
 
   const form = useForm<CreateBetInput>({
     resolver: zodResolver(createBetSchema),
@@ -153,7 +155,7 @@ export function CreateBetForm({ team }: { team: TeamWithMemberships }) {
                 <FormItem>
                   <FormLabel>{`Question`}</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder={getRandomQuestionPlaceholder()} />
+                    <Input {...field} placeholder={questionPlaceholder} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

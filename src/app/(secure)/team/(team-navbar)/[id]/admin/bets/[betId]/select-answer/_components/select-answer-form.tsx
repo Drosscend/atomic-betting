@@ -32,8 +32,8 @@ export function SelectAnswerForm({ bet, teamId }: SelectAnswerFormProps) {
   const { execute, isExecuting } = useAction(selectAnswer, {
     onSuccess: (result) => {
       if (result.data && result.data.success) {
-        toast(result.data.message);
         router.push(`/team/${teamId}/admin/bets`);
+        toast(result.data.message);
       } else {
         toast(`Une erreur est survenue : ${result.data?.message || "Erreur inconnue"}`);
       }

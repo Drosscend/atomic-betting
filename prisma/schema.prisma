@@ -109,14 +109,17 @@ model Bet {
 }
 
 model BetTransaction {
-  id               String         @id @default(uuid())
+  id               String          @id @default(uuid())
   betId            String
-  bet              Bet            @relation(fields: [betId], references: [id], onDelete: Cascade)
+  bet              Bet             @relation(fields: [betId], references: [id], onDelete: Cascade)
   teamMembershipId String
-  teamMembership   TeamMembership @relation(fields: [teamMembershipId], references: [id], onDelete: Cascade)
+  teamMembership   TeamMembership  @relation(fields: [teamMembershipId], references: [id], onDelete: Cascade)
   coinsAmount      Int
-  transactionDate  DateTime       @default(now())
+  transactionDate  DateTime        @default(now())
   odds             Float?
+  betOptionId      String
+  betOption        BetOption       @relation(fields: [betOptionId], references: [id], onDelete: Cascade)
+  transactionType  TransactionType @default(BET)
 
   @@map("bet_transactions")
 }
@@ -134,11 +137,12 @@ model QuestionBet {
 }
 
 model BetOption {
-  id             String        @id @default(uuid())
+  id             String           @id @default(uuid())
   questionBetId  String
-  questionBet    QuestionBet   @relation(fields: [questionBetId], references: [id], onDelete: Cascade)
+  questionBet    QuestionBet      @relation(fields: [questionBetId], references: [id], onDelete: Cascade)
   content        String
-  correctForBets QuestionBet[] @relation("CorrectOption")
+  correctForBets QuestionBet[]    @relation("CorrectOption")
+  transactions   BetTransaction[]
 
   @@map("bet_options")
 }
@@ -158,4 +162,9 @@ enum MembershipRole {
   MEMBER
   MANAGER
   ADMIN
+}
+
+enum TransactionType {
+  BET
+  WINNINGS
 }

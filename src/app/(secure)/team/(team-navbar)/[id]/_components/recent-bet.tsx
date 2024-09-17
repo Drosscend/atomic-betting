@@ -1,3 +1,5 @@
+import { TransactionType } from "@prisma/client";
+import { CircleDollarSignIcon, TrophyIcon } from "lucide-react";
 import { IncrementNumber } from "@/components/increment-number";
 import type { UserBet } from "@/lib/database/bet";
 
@@ -17,15 +19,24 @@ export function RecentBet({ recentBets }: RecentBetProps) {
   return (
     <div className="space-y-8">
       {recentBets.map((bet, index) => (
-        <div key={index} className="flex items-center justify-between">
-          <div className="space-y-1">
-            <p className="text-sm font-medium leading-none">{bet.bet.questionBet?.question || bet.bet.description}</p>
-            <p className="text-muted-foreground text-xs">{`Votre mise: ${bet.coinsAmount} A.c.`}</p>
+        <div key={index} className="flex items-center">
+          <div className="mr-4">
+            {bet.transactionType === TransactionType.BET ? (
+              <CircleDollarSignIcon className="size-6 text-blue-500" />
+            ) : (
+              <TrophyIcon className="size-6 text-yellow-500" />
+            )}
           </div>
-          <div className="flex items-center space-x-4">
-            <div className={`font-medium ${bet.coinsAmount >= 0 ? "text-green-500" : "text-red-500"}`}>
-              {bet.coinsAmount >= 0 ? "+" : ""}
-              <IncrementNumber end={bet.coinsAmount} duration={1000} />
+          <div className="flex flex-1 items-center justify-between">
+            <div className="space-y-1">
+              <p className="text-sm font-medium leading-none">{bet.bet.questionBet?.question || bet.bet.description}</p>
+              <p className="text-muted-foreground text-xs">
+                {bet.transactionType === TransactionType.BET ? `Votre mise: ${Math.abs(bet.coinsAmount)} A.c.` : `Gains: ${bet.coinsAmount} A.c.`}
+              </p>
+            </div>
+            <div className={`font-medium ${bet.transactionType === TransactionType.WINNINGS ? "text-green-500" : "text-blue-500"}`}>
+              {bet.transactionType === TransactionType.WINNINGS ? "+" : "-"}
+              <IncrementNumber end={Math.abs(bet.coinsAmount)} duration={1000} />
             </div>
           </div>
         </div>

@@ -30,8 +30,9 @@ export function CurrentBets({ activeBets, userId }: CurrentBetProps) {
   return (
     <div className="space-y-4">
       {activeBets.map((bet) => {
-        const userTransaction = bet.transactions.find((t) => t.teamMembership.userId === userId);
+        const userTransactions = bet.transactions.filter((t) => t.teamMembership.userId === userId);
         const totalBetAmount = bet.transactions.reduce((sum, t) => sum + t.coinsAmount, 0);
+        const userTotalBetAmount = userTransactions.reduce((sum, t) => sum + t.coinsAmount, 0);
 
         const totalDuration = differenceInSeconds(bet.endDateTime, bet.startDateTime);
         const elapsed = differenceInSeconds(now, bet.startDateTime);
@@ -68,19 +69,19 @@ export function CurrentBets({ activeBets, userId }: CurrentBetProps) {
               <div className="mt-2">
                 <Progress value={progress} className="w-full" />
               </div>
-              {userTransaction ? (
+              {userTransactions.length > 0 ? (
                 <div className="mt-4">
                   <Badge variant="secondary" className="mb-2">
                     {`Votre pari`}
                   </Badge>
                   <p className="text-sm">
-                    {`Montant: `}
-                    <IncrementNumber end={userTransaction.coinsAmount} duration={1000} />
+                    {`Montant total parié: `}
+                    <IncrementNumber end={userTotalBetAmount} duration={1000} />
                     {` A.c.`}
                   </p>
                   <p className="text-sm">
                     {`Votre réponse: `}
-                    {/* Add user's answer here if available */}
+                    {bet.questionBet?.options.find((o) => o.id === userTransactions[0].betOptionId)?.content || "N/A"}
                   </p>
                 </div>
               ) : (
@@ -94,7 +95,7 @@ export function CurrentBets({ activeBets, userId }: CurrentBetProps) {
             </CardContent>
             <CardFooter>
               <Link href={`/team/${bet.teamId}/bets/${bet.id}`} passHref className="w-full">
-                <Button className="w-full">{userTransaction ? "Voir les détails du pari" : "Placer un pari"}</Button>
+                <Button className="w-full">{userTransactions.length > 0 ? "Voir les détails du pari" : "Placer un pari"}</Button>
               </Link>
             </CardFooter>
           </Card>
