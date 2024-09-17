@@ -29,7 +29,7 @@ export function TeamCard({ team, activeBetsCount }: TeamCardProps) {
           <span>{team.name}</span>
           <Badge variant="secondary" className="ml-2">
             <GalleryVerticalEndIcon className="mr-1 size-3" />
-            {`${activeBetsCount} ${activeBetsCount === 1 ? "pari actif" : "paris actifs"}`}
+            {`${activeBetsCount} ${activeBetsCount === 1 ? "pari en cours" : "paris en cours"}`}
           </Badge>
         </CardTitle>
       </CardHeader>
