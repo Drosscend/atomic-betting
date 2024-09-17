@@ -2,18 +2,20 @@
 
 import { useTeam } from "@/contexts/team-context";
 import { MembershipStatus } from "@prisma/client";
-import { UsersIcon } from "lucide-react";
+import { GalleryVerticalEndIcon, UsersIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import type { TeamWithMemberships } from "@/lib/database/team";
 
 interface TeamCardProps {
   team: TeamWithMemberships;
+  activeBetsCount: number;
 }
 
-export function TeamCard({ team }: TeamCardProps) {
+export function TeamCard({ team, activeBetsCount }: TeamCardProps) {
   const { setSelectedTeamId } = useTeam();
 
   const handleTeamClick = () => {
@@ -23,7 +25,13 @@ export function TeamCard({ team }: TeamCardProps) {
   return (
     <Card className="transition-shadow hover:shadow-lg">
       <CardHeader>
-        <CardTitle>{team.name}</CardTitle>
+        <CardTitle className="flex items-center justify-between">
+          <span>{team.name}</span>
+          <Badge variant="secondary" className="ml-2">
+            <GalleryVerticalEndIcon className="mr-1 size-3" />
+            {`${activeBetsCount} ${activeBetsCount === 1 ? "pari actif" : "paris actifs"}`}
+          </Badge>
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex h-32 items-center justify-center rounded-lg">
@@ -37,7 +45,7 @@ export function TeamCard({ team }: TeamCardProps) {
         </div>
         <p className="mt-4 text-center">
           <UsersIcon className="mr-2 inline-block" />
-          {team.memberships.filter((membership) => membership.status === MembershipStatus.APPROVED).length} membres
+          {`${team.memberships.filter((membership) => membership.status === MembershipStatus.APPROVED).length} membres`}
         </p>
       </CardContent>
       <CardFooter>

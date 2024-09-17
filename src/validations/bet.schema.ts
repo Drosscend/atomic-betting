@@ -23,7 +23,13 @@ export const betSchema = z.object({
   options: z
     .array(z.string())
     .min(2, { message: `Il doit y avoir au moins 2 options.` })
-    .max(5, { message: `Il ne peut pas y avoir plus de 5 options.` }),
+    .max(5, { message: `Il ne peut pas y avoir plus de 5 options.` })
+    .refine(
+      (value) => {
+        return value.length === new Set(value).size;
+      },
+      { message: `Les options doivent être uniques.` }
+    ),
 });
 
 export const createBetSchema = betSchema.extend({

@@ -1,6 +1,6 @@
 "use client";
 
-import { differenceInSeconds, format } from "date-fns";
+import { differenceInSeconds, format, isAfter, isBefore, isEqual } from "date-fns";
 import { fr } from "date-fns/locale";
 import { CheckCircleIcon } from "lucide-react";
 import Link from "next/link";
@@ -21,9 +21,9 @@ interface BetsListProps {
 export function BetsList({ bets, teamId }: BetsListProps) {
   const now = new Date();
 
-  const activeBets = bets.filter((bet) => bet.startDateTime < now && bet.endDateTime > now);
-  const pendingBets = bets.filter((bet) => bet.startDateTime >= now);
-  const completedBets = bets.filter((bet) => bet.endDateTime <= now);
+  const activeBets = bets.filter((bet) => isEqual(bet.startDateTime, now) || (isBefore(bet.startDateTime, now) && isAfter(bet.endDateTime, now)));
+  const pendingBets = bets.filter((bet) => isAfter(bet.startDateTime, now) || isEqual(bet.startDateTime, now));
+  const completedBets = bets.filter((bet) => isBefore(bet.endDateTime, now) && !isEqual(bet.endDateTime, now));
 
   const renderBetCard = (bet: BetWithTransactions, isActive: boolean = false) => {
     const totalBetAmount = bet.transactions.reduce((sum, t) => sum + t.coinsAmount, 0);

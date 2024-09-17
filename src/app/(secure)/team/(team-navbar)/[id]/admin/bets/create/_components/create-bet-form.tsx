@@ -186,6 +186,9 @@ export function CreateBetForm({ team }: { team: TeamWithMemberships }) {
                 {`Ajouter une option`}
               </Button>
             )}
+            {form.formState.errors.options?.root && (
+              <p className="text-destructive text-sm font-medium">{form.formState.errors.options?.root.message}</p>
+            )}
           </CardContent>
           <CardFooter>
             <Button type="submit" disabled={isExecuting}>
