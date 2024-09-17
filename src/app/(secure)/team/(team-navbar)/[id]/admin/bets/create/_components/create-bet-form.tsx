@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { getRandomQuestionPlaceholder } from "@/lib/bet-placeholders";
 import type { TeamWithMemberships } from "@/lib/database/team";
 
 export function CreateBetForm({ team }: { team: TeamWithMemberships }) {
@@ -152,7 +153,7 @@ export function CreateBetForm({ team }: { team: TeamWithMemberships }) {
                 <FormItem>
                   <FormLabel>{`Question`}</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Posez votre question" />
+                    <Input {...field} placeholder={getRandomQuestionPlaceholder()} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
