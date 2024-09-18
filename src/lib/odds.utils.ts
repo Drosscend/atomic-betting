@@ -1,21 +1,44 @@
-import type { BetTransaction } from "@prisma/client";
-
-type TransactionWithOption = BetTransaction & {
-  betOptionId: string | null;
+export type TransactionWithOption = {
+  betOptionId: string;
+  coinsAmount: number; // This amount is negative as it represents coins subtracted from users
 };
 
-export function calculateOdds(transactions: TransactionWithOption[], optionId: string): number {
-  const optionCoins = transactions.filter((t) => t.betOptionId === optionId).reduce((sum, t) => sum + t.coinsAmount, 0);
+export function calculateOdds(
+  transactions: TransactionWithOption[],
+  allOptions: string[],
+  minOdds: number = 1.01,
+  defaultOdds: number = 10.0
+): Record<string, number> {
+  const { totalCoinsPerOption, totalCoinsBet } = transactions.reduce(
+    (acc, { betOptionId, coinsAmount }) => {
+      const absoluteAmount = Math.abs(coinsAmount);
+      if (absoluteAmount > 0) {
+        acc.totalCoinsPerOption[betOptionId] = (acc.totalCoinsPerOption[betOptionId] || 0) + absoluteAmount;
+        acc.totalCoinsBet += absoluteAmount;
+      }
+      return acc;
+    },
+    { totalCoinsPerOption: {} as Record<string, number>, totalCoinsBet: 0 }
+  );
 
-  const totalCoins = transactions.reduce((sum, t) => sum + t.coinsAmount, 0);
-
-  const minStake = 1;
-
-  if (totalCoins === 0) {
-    return 2; // 50%
-  } else if (optionCoins === 0) {
-    return (totalCoins + minStake) / minStake;
-  } else {
-    return (totalCoins + minStake) / (optionCoins + minStake);
+  if (totalCoinsBet === 0) {
+    return allOptions.reduce(
+      (acc, optionId) => {
+        acc[optionId] = defaultOdds;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
   }
+
+  return allOptions.reduce(
+    (acc, optionId) => {
+      const optionTotal = totalCoinsPerOption[optionId] || 0;
+      const probability = optionTotal / totalCoinsBet;
+      const calculatedOdds = probability > 0 ? Math.max(1 / probability, minOdds) : defaultOdds;
+      acc[optionId] = Math.round(calculatedOdds * 100) / 100;
+      return acc;
+    },
+    {} as Record<string, number>
+  );
 }

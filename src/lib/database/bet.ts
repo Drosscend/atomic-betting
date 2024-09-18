@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import { isAfter, isBefore, isEqual } from "date-fns";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import { prisma } from "@/lib/database/db";
@@ -130,13 +131,9 @@ export const getActiveTeamBets = cache(async (teamId: string): Promise<BetWithTr
   });
   if (!team) notFound();
 
-  const now = new Date();
-  return prisma.bet.findMany({
+  const bets = await prisma.bet.findMany({
     where: {
       teamId,
-      endDateTime: {
-        gt: now,
-      },
     },
     include: {
       transactions: {
@@ -156,6 +153,9 @@ export const getActiveTeamBets = cache(async (teamId: string): Promise<BetWithTr
     },
     orderBy: { endDateTime: "asc" },
   });
+
+  const now = new Date();
+  return bets.filter((bet) => isEqual(bet.startDateTime, now) || (isBefore(bet.startDateTime, now) && isAfter(bet.endDateTime, now)));
 });
 
 /**

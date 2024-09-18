@@ -4,7 +4,6 @@ import { SelectAnswerInput } from "@/validations/bet.schema";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/database/db";
-import { calculateOdds } from "@/lib/odds.utils";
 import { authActionClient } from "@/lib/safe-action";
 
 export const selectAnswer = authActionClient.schema(SelectAnswerInput).action(async ({ parsedInput, ctx: { user } }) => {
@@ -37,8 +36,6 @@ export const selectAnswer = authActionClient.schema(SelectAnswerInput).action(as
     const totalBetAmount = bet.transactions.reduce((sum, t) => sum + Math.abs(t.coinsAmount), 0);
     const winningBetAmount = winningTransactions.reduce((sum, t) => sum + Math.abs(t.coinsAmount), 0);
 
-    const odds = calculateOdds(bet.transactions, optionId);
-
     const transactionOperations: Prisma.PrismaPromise<any>[] = [
       prisma.questionBet.update({
         where: { id: bet.questionBet!.id },
@@ -47,7 +44,12 @@ export const selectAnswer = authActionClient.schema(SelectAnswerInput).action(as
     ];
 
     winningTransactions.forEach((transaction) => {
-      const winnings = Math.floor(Math.abs(transaction.coinsAmount) * odds);
+      if (transaction.odds === null) {
+        console.error(`Transaction ${transaction.id} n'a pas de cote enregistrée.`);
+        return;
+      }
+
+      const winnings = Math.floor(Math.abs(transaction.coinsAmount) * transaction.odds);
 
       transactionOperations.push(
         prisma.teamMembership.update({
@@ -63,7 +65,7 @@ export const selectAnswer = authActionClient.schema(SelectAnswerInput).action(as
             teamMembershipId: transaction.teamMembershipId,
             coinsAmount: winnings,
             betOptionId: optionId,
-            odds: odds,
+            odds: transaction.odds,
             transactionType: "WINNINGS",
           },
         })
@@ -74,7 +76,7 @@ export const selectAnswer = authActionClient.schema(SelectAnswerInput).action(as
 
     const winRate = (winningBetAmount / totalBetAmount) * 100;
 
-    revalidatePath(`/team/${bet.teamId}/admin/bets`);
+    revalidatePath(`/team/${bet.teamId}`);
     return {
       success: true,
       message: `La réponse a été sélectionnée, les gains ont été distribués et enregistrés avec succès. ${winningTransactions.length} gagnants sur un total de ${bet.transactions.length} participants. Taux de réussite : ${winRate.toFixed(2)}%.`,
