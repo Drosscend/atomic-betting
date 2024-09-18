@@ -14,9 +14,9 @@ export async function Navbar() {
         <Link className="text-sm font-medium underline-offset-4 hover:underline" href="/features">
           Fonctionnalités
         </Link>
-        {/*<Link className="text-sm font-medium underline-offset-4 hover:underline" href="#">*/}
-        {/*  Tarifs*/}
-        {/*</Link>*/}
+        <Link className="text-sm font-medium underline-offset-4 hover:underline" href="/faq">
+          F.A.Q.
+        </Link>
         <Link className="text-sm font-medium underline-offset-4 hover:underline" href="/about">
           À propos
         </Link>
