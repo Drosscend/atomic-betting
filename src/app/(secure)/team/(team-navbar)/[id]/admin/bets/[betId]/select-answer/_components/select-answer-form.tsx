@@ -5,6 +5,7 @@ import { SelectAnswerInput } from "@/validations/bet.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useAction } from "next-safe-action/hooks";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,9 +15,12 @@ import type { BetWithTransactions } from "@/lib/database/bet";
 
 interface SelectAnswerFormProps {
   bet: BetWithTransactions;
+  teamId: string;
 }
 
-export function SelectAnswerForm({ bet }: SelectAnswerFormProps) {
+export function SelectAnswerForm({ bet, teamId }: SelectAnswerFormProps) {
+  const router = useRouter();
+
   const form = useForm<SelectAnswerInput>({
     resolver: zodResolver(SelectAnswerInput),
     defaultValues: {
@@ -28,6 +32,7 @@ export function SelectAnswerForm({ bet }: SelectAnswerFormProps) {
   const { execute, isExecuting } = useAction(selectAnswer, {
     onSuccess: (result) => {
       if (result.data && result.data.success) {
+        router.push(`/team/${teamId}/admin/bets`);
         toast(result.data.message);
       } else {
         toast(`Une erreur est survenue : ${result.data?.message || "Erreur inconnue"}`);

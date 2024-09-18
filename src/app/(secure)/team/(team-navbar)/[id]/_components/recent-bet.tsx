@@ -22,7 +22,7 @@ export function RecentBet({ recentBets }: RecentBetProps) {
         <div key={index} className="flex items-center">
           <div className="mr-4">
             {bet.transactionType === TransactionType.BET ? (
-              <CircleDollarSignIcon className="size-6 text-blue-500" />
+              <CircleDollarSignIcon className="size-6 text-red-500" />
             ) : (
               <TrophyIcon className="size-6 text-yellow-500" />
             )}
@@ -34,7 +34,7 @@ export function RecentBet({ recentBets }: RecentBetProps) {
                 {bet.transactionType === TransactionType.BET ? `Votre mise: ${Math.abs(bet.coinsAmount)} A.c.` : `Gains: ${bet.coinsAmount} A.c.`}
               </p>
             </div>
-            <div className={`font-medium ${bet.transactionType === TransactionType.WINNINGS ? "text-green-500" : "text-blue-500"}`}>
+            <div className={`font-medium ${bet.transactionType === TransactionType.WINNINGS ? "text-green-500" : "text-red-500"}`}>
               {bet.transactionType === TransactionType.WINNINGS ? "+" : "-"}
               <IncrementNumber end={Math.abs(bet.coinsAmount)} duration={1000} />
             </div>
