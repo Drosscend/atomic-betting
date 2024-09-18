@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useConfetti } from "@/components/confetti";
 import { Button } from "@/components/ui/button";
@@ -19,7 +18,6 @@ export function CreateTeamForm() {
   const { showConfetti } = useConfetti();
   const router = useRouter();
   const { setSelectedTeamId } = useTeam();
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<CreateTeamInput>({
     resolver: zodResolver(createTeamSchema),
@@ -30,10 +28,8 @@ export function CreateTeamForm() {
     },
   });
 
-  const { execute } = useAction(createTeam, {
-    onExecute: () => setIsSubmitting(true),
+  const { execute, isExecuting } = useAction(createTeam, {
     onSuccess: (result) => {
-      setIsSubmitting(false);
       if (result.data && result.data.success && result.data.teamId) {
         toast(result.data.message);
         setSelectedTeamId(result.data.teamId);
@@ -44,7 +40,6 @@ export function CreateTeamForm() {
       }
     },
     onError: ({ error }) => {
-      setIsSubmitting(false);
       toast(`Une erreur est survenue : ${error.serverError || "Erreur inconnue"}`);
     },
   });
@@ -104,8 +99,8 @@ export function CreateTeamForm() {
             />
           </CardContent>
           <CardFooter>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? `Création en cours...` : `Créer l'équipe`}
+            <Button type="submit" disabled={isExecuting}>
+              {isExecuting ? `Création en cours...` : `Créer l'équipe`}
             </Button>
           </CardFooter>
         </form>

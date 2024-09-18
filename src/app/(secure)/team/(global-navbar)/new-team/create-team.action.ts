@@ -2,6 +2,7 @@
 
 import { createTeamSchema } from "@/validations/create-team.schema";
 import { MembershipRole, MembershipStatus } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/database/db";
 import { authActionClient } from "@/lib/safe-action";
 
@@ -25,6 +26,8 @@ export const createTeam = authActionClient.schema(createTeamSchema).action(async
         },
       },
     });
+
+    revalidatePath(`/`, "layout");
 
     return {
       success: true,
