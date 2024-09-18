@@ -8,7 +8,6 @@ interface AdminLayoutProps {
 
 const getNavItems = (teamId: string) => [
   { href: `/team/${teamId}/admin`, label: "Paramètres globaux" },
-  { href: `/team/${teamId}/admin/notifications`, label: "Notifications" },
   { href: `/team/${teamId}/admin/users`, label: "Utilisateurs" },
   { href: `/team/${teamId}/admin/bets`, label: "Paris" },
 ];
