@@ -8,6 +8,7 @@ import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useConfetti } from "@/components/confetti";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -15,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { createTeam } from "../create-team.action";
 
 export function CreateTeamForm() {
+  const { showConfetti } = useConfetti();
   const router = useRouter();
   const { setSelectedTeamId } = useTeam();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,6 +37,7 @@ export function CreateTeamForm() {
       if (result.data && result.data.success && result.data.teamId) {
         toast(result.data.message);
         setSelectedTeamId(result.data.teamId);
+        showConfetti(3000);
         router.push(`/team`);
       } else {
         toast(`Une erreur est survenue : ${result.data?.message || "Erreur inconnue"}`);

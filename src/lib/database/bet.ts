@@ -24,7 +24,7 @@ export type BetWithTransactions = Prisma.BetGetPayload<{
   };
 }>;
 
-export type UserBet = Prisma.BetTransactionGetPayload<{
+export type UserBet = Prisma.TransactionGetPayload<{
   include: {
     bet: {
       include: {
@@ -96,7 +96,7 @@ export const getUserBetsForTeam = cache(async (userId: string, teamId: string): 
   });
   if (!user) notFound();
 
-  return prisma.betTransaction.findMany({
+  return prisma.transaction.findMany({
     where: {
       teamMembership: {
         userId,

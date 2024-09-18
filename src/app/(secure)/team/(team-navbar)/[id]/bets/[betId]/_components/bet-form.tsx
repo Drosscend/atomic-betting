@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import type { BetWithTransactions } from "@/lib/database/bet";
-import { calculateOdds } from "@/lib/odds.utils";
+import { TransactionWithOption, calculateOdds } from "@/lib/odds.utils";
 import { cn } from "@/lib/utils";
 import { formatTimeLeft } from "@/lib/utils.date";
 
@@ -61,7 +61,13 @@ export function BetForm({ bet, userSelectedOption, userTransactions, userCoins }
   };
 
   const allOptions = bet.questionBet?.options.map((option) => option.id) || [];
-  const odds = calculateOdds(bet.transactions, allOptions, 1.01, 10.0);
+  const transactions: TransactionWithOption[] = bet.transactions
+    .filter((t) => t.transactionType === "BET")
+    .map((t) => ({
+      betOptionId: t.betOptionId!,
+      coinsAmount: t.coinsAmount,
+    }));
+  const odds = calculateOdds(transactions, allOptions, 1.01, 10.0);
 
   const totalCoins = bet.transactions.reduce((sum, t) => sum + Math.abs(t.coinsAmount), 0);
   const optionStats = bet.questionBet?.options.reduce(

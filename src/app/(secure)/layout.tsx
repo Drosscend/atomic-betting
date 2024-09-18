@@ -2,6 +2,7 @@ import { Toaster } from "sonner";
 import { SessionProvider } from "next-auth/react";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
+import { Confetti } from "@/components/confetti";
 import { auth } from "@/lib/auth";
 
 export default async function Layout({
@@ -17,6 +18,7 @@ export default async function Layout({
     <SessionProvider>
       <main>{children}</main>
       <Toaster />
+      <Confetti />
     </SessionProvider>
   );
 }

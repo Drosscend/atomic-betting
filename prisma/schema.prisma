@@ -84,16 +84,18 @@ model TeamMembership {
   coins           Int              @default(0)
   user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   team            Team             @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  lastDailyReward DateTime?
+  consecutiveDays Int              @default(0)
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
-  betTransactions BetTransaction[]
+  transactions    Transaction[]
 
   @@unique([userId, teamId])
   @@map("team_memberships")
 }
 
 model Bet {
-  id            String           @id @default(uuid())
+  id            String        @id @default(uuid())
   type          BetType
   startDateTime DateTime
   endDateTime   DateTime
@@ -101,27 +103,27 @@ model Bet {
   maxCoins      Int
   description   String
   teamId        String
-  team          Team             @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  transactions  BetTransaction[]
+  team          Team          @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  transactions  Transaction[]
   questionBet   QuestionBet?
 
   @@map("bets")
 }
 
-model BetTransaction {
+model Transaction {
   id               String          @id @default(uuid())
-  betId            String
-  bet              Bet             @relation(fields: [betId], references: [id], onDelete: Cascade)
   teamMembershipId String
   teamMembership   TeamMembership  @relation(fields: [teamMembershipId], references: [id], onDelete: Cascade)
   coinsAmount      Int
   transactionDate  DateTime        @default(now())
+  transactionType  TransactionType
   odds             Float?
-  betOptionId      String
-  betOption        BetOption       @relation(fields: [betOptionId], references: [id], onDelete: Cascade)
-  transactionType  TransactionType @default(BET)
+  betId            String?
+  bet              Bet?            @relation(fields: [betId], references: [id], onDelete: Cascade)
+  betOptionId      String?
+  betOption        BetOption?      @relation(fields: [betOptionId], references: [id], onDelete: Cascade)
 
-  @@map("bet_transactions")
+  @@map("transactions")
 }
 
 model QuestionBet {
@@ -137,12 +139,12 @@ model QuestionBet {
 }
 
 model BetOption {
-  id             String           @id @default(uuid())
+  id             String        @id @default(uuid())
   questionBetId  String
-  questionBet    QuestionBet      @relation(fields: [questionBetId], references: [id], onDelete: Cascade)
+  questionBet    QuestionBet   @relation(fields: [questionBetId], references: [id], onDelete: Cascade)
   content        String
-  correctForBets QuestionBet[]    @relation("CorrectOption")
-  transactions   BetTransaction[]
+  correctForBets QuestionBet[] @relation("CorrectOption")
+  transactions   Transaction[]
 
   @@map("bet_options")
 }
@@ -167,4 +169,5 @@ enum MembershipRole {
 enum TransactionType {
   BET
   WINNINGS
+  DAILY_REWARD
 }

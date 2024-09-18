@@ -18,13 +18,7 @@ export function CurrentBets({ activeBets, userId }: CurrentBetProps) {
   const now = new Date();
 
   if (activeBets && activeBets.length === 0) {
-    return (
-      <Card>
-        <CardContent className="pt-6">
-          <p className="text-muted-foreground text-center">{`Aucun pari actif pour le moment.`}</p>
-        </CardContent>
-      </Card>
-    );
+    return <p className="text-muted-foreground text-center">{`Aucun pari actif pour le moment.`}</p>;
   }
 
   return (

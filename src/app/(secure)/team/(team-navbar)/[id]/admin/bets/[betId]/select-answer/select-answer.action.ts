@@ -59,7 +59,7 @@ export const selectAnswer = authActionClient.schema(SelectAnswerInput).action(as
       );
 
       transactionOperations.push(
-        prisma.betTransaction.create({
+        prisma.transaction.create({
           data: {
             betId: bet.id,
             teamMembershipId: transaction.teamMembershipId,

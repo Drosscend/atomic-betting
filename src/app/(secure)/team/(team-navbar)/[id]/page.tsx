@@ -1,5 +1,6 @@
 import { CurrentBets } from "@/app/(secure)/team/(team-navbar)/[id]/_components/current-bets";
-import { RecentBet } from "@/app/(secure)/team/(team-navbar)/[id]/_components/recent-bet";
+import { DailyRewardClaimCard } from "@/app/(secure)/team/(team-navbar)/[id]/_components/daily-reward-claim-card";
+import { LastTransaction } from "@/app/(secure)/team/(team-navbar)/[id]/_components/last-transaction";
 import { format } from "date-fns/format";
 import { fr } from "date-fns/locale";
 import { CoinsIcon, LandmarkIcon, LayersIcon, UsersIcon } from "lucide-react";
@@ -35,7 +36,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
-      <div className="flex items-center">
+      <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between">
         <h2 className="text-3xl font-bold tracking-tight">{`Tableau de bord de l'équipe ${team.name}`}</h2>
       </div>
       <Tabs defaultValue="global" className="space-y-4">
@@ -46,7 +47,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="global" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">{`Vos Atomic Coins`}</CardTitle>
@@ -97,6 +98,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                 <p className="text-muted-foreground text-xs">{`Nombre total d'utilisateurs dans l'équipe`}</p>
               </CardContent>
             </Card>
+            <DailyRewardClaimCard teamId={team.id} membership={userMembership!} />
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
             <Card className="col-span-1 w-full md:col-span-2 lg:col-span-5">
@@ -114,11 +116,11 @@ export default async function Page({ params }: { params: { id: string } }) {
             </Card>
             <Card className="col-span-1 md:col-span-2 lg:col-span-2">
               <CardHeader>
-                <CardTitle>{`Derniers paris joués`}</CardTitle>
-                <CardDescription>{`Vos derniers paris joués`}</CardDescription>
+                <CardTitle>{`Vos dernières transactions`}</CardTitle>
+                <CardDescription>{`Les 5 dernières transactions de votre compte`}</CardDescription>
               </CardHeader>
               <CardContent>
-                <RecentBet recentBets={userBets.slice(0, 5)} />
+                <LastTransaction recentTransactions={userBets.slice(0, 5)} />
               </CardContent>
             </Card>
           </div>

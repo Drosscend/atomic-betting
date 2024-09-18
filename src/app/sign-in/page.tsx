@@ -1,5 +1,6 @@
 import type { SignInPageErrorParam } from "@auth/core/types";
 import { SiDiscord, SiGithub } from "@icons-pack/react-simple-icons";
+import { AtomIcon } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,8 +10,13 @@ export default function Page({ searchParams }: { searchParams: { error: SignInPa
   return (
     <div className="bg-background flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-center text-2xl font-bold">{`Connexion`}</CardTitle>
+        <CardHeader className="space-y-2">
+          <CardTitle className="text-center text-2xl font-bold">
+            <div className="flex items-center justify-center">
+              <AtomIcon className="mr-2 size-6" />
+              <span className="font-bold">{`Connexion`}</span>
+            </div>
+          </CardTitle>
           <CardDescription className="text-center">{`Connectez-vous avec GitHub ou Discord pour accéder à votre compte`}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col space-y-4">

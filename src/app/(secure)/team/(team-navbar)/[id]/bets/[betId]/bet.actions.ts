@@ -1,6 +1,7 @@
 "use server";
 
 import { placeBetSchema } from "@/validations/bet.schema";
+import { TransactionType } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/database/db";
 import { authActionClient } from "@/lib/safe-action";
@@ -29,7 +30,7 @@ export const placeBet = authActionClient.schema(placeBetSchema).action(async ({ 
       return { success: false, message: `Vous n'avez pas assez de jetons pour placer ce pari.` };
     }
 
-    const existingTransaction = await prisma.betTransaction.findFirst({
+    const existingTransaction = await prisma.transaction.findFirst({
       where: { betId, teamMembershipId: teamMembership.id },
     });
 
@@ -42,13 +43,14 @@ export const placeBet = authActionClient.schema(placeBetSchema).action(async ({ 
     const odds = totalCoins / optionCoins;
 
     await prisma.$transaction([
-      prisma.betTransaction.create({
+      prisma.transaction.create({
         data: {
           betId,
           teamMembershipId: teamMembership.id,
           coinsAmount: -coinsAmount,
           betOptionId: optionId,
           odds,
+          transactionType: TransactionType.BET,
         },
       }),
       prisma.teamMembership.update({
