@@ -11,7 +11,7 @@ export default async function SelectAnswerPage({ params }: { params: { id: strin
   return (
     <div className="container mx-auto p-4">
       <h1 className="mb-6 text-3xl font-bold">{`Sélectionner la réponse correcte`}</h1>
-      <SelectAnswerForm bet={bet} teamId={params.id} />
+      <SelectAnswerForm bet={bet} />
     </div>
   );
 }
