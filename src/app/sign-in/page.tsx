@@ -1,5 +1,5 @@
 import type { SignInPageErrorParam } from "@auth/core/types";
-import { SiDiscord, SiGithub } from "@icons-pack/react-simple-icons";
+import { SiDiscord, SiGithub, SiGoogle } from "@icons-pack/react-simple-icons";
 import { AtomIcon } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ export default function Page({ searchParams }: { searchParams: { error: SignInPa
         <CardContent className="flex flex-col space-y-4">
           {searchParams.error === "OAuthAccountNotLinked" && (
             <Alert variant="destructive">
-              <AlertDescription>{`L'authentification a échoué. Ce compte est déjà lié à un autre utilisateur.`}</AlertDescription>
+              <AlertDescription>{`L'authentification a échoué. Merci de vous connecter avec le même compte que celui utilisé lors de votre inscription.`}</AlertDescription>
             </Alert>
           )}
           <form
@@ -45,6 +45,17 @@ export default function Page({ searchParams }: { searchParams: { error: SignInPa
             <Button type="submit" className="w-full">
               <SiDiscord className="mr-2 size-4" />
               {`Se connecter avec Discord`}
+            </Button>
+          </form>
+          <form
+            action={async () => {
+              "use server";
+              await signIn("google", { redirectTo: "/team" });
+            }}
+          >
+            <Button type="submit" className="w-full">
+              <SiGoogle className="mr-2 size-4" />
+              {`Se connecter avec Google`}
             </Button>
           </form>
         </CardContent>
