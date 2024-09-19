@@ -85,7 +85,7 @@ export const deleteTeam = authActionClient
       await prisma.team.delete({
         where: { id: teamId },
       });
-      revalidatePath("/team");
+      revalidatePath("/team", "layout");
       return {
         success: true,
         message: `L'équipe a été supprimée avec succès.`,
@@ -145,10 +145,11 @@ export const updateUserRole = authActionClient
         },
       });
 
-      revalidatePath(`/team/${teamId}/admin`);
+      revalidatePath(`/team/${teamId}`);
       return {
         success: true,
         message: `Le rôle de l'utilisateur a été mis à jour avec succès.`,
+        data: { userId, role },
       };
     } catch (error) {
       console.error("Erreur lors de la mise à jour du rôle de l'utilisateur:", error);

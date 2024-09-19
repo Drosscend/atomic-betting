@@ -18,10 +18,15 @@ interface RoleManagementProps {
 export function RoleManagement({ team, isAdmin }: RoleManagementProps) {
   const [localUsers, setLocalUsers] = useState<MembershipsWithUsers[]>(team.memberships);
 
-  const { execute: executeUpdateRole, hasSucceeded } = useAction(updateUserRole, {
+  const { execute: executeUpdateRole } = useAction(updateUserRole, {
     onSuccess: (result) => {
       if (result.data && result.data.success) {
         toast(result.data.message);
+        if (result.data.data) {
+          setLocalUsers((prevUsers) =>
+            prevUsers.map((user) => (user.userId === result.data?.data?.userId ? { ...user, role: result.data.data.role as MembershipRole } : user))
+          );
+        }
       } else if (result.data) {
         toast(result.data.message);
       }
@@ -39,9 +44,6 @@ export function RoleManagement({ team, isAdmin }: RoleManagementProps) {
       teamId: team.id,
     };
     executeUpdateRole(data);
-    if (hasSucceeded) {
-      setLocalUsers(localUsers.map((user) => (user.id === userId ? { ...user, role: newRole } : user)));
-    }
   };
 
   return (

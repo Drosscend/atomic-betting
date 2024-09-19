@@ -100,6 +100,7 @@ export function UserManagement({ team }: { team: TeamWithMemberships }) {
                     value={membership.coins}
                     onChange={(value) => handleCoinsChange(membership.userId, value as number)}
                     className="w-20"
+                    min={0}
                   />
                 </TableCell>
                 <TableCell>

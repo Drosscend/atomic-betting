@@ -24,9 +24,9 @@ export function CurrentBets({ activeBets, userId }: CurrentBetProps) {
   return (
     <div className="space-y-4">
       {activeBets.map((bet) => {
-        const userTransactions = bet.transactions.filter((t) => t.teamMembership.userId === userId);
-        const totalBetAmount = bet.transactions.reduce((sum, t) => sum + t.coinsAmount, 0);
-        const userTotalBetAmount = userTransactions.reduce((sum, t) => sum + t.coinsAmount, 0);
+        const userTransactions = bet.transactions.filter((t) => t.teamMembership.userId === userId && t.transactionType === "BET");
+        const totalBetAmount = bet.transactions.reduce((sum, t) => sum + Math.abs(t.coinsAmount), 0);
+        const userTotalBetAmount = userTransactions.reduce((sum, t) => sum + Math.abs(t.coinsAmount), 0);
 
         const totalDuration = differenceInSeconds(bet.endDateTime, bet.startDateTime);
         const elapsed = differenceInSeconds(now, bet.startDateTime);

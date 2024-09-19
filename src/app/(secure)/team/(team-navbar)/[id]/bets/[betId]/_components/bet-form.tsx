@@ -199,16 +199,21 @@ export function BetForm({ bet, userSelectedOption, userTransactions, userCoins }
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-lg font-semibold">{`Montant du pari (A.c.)`}</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      {...field}
-                      onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : "")}
-                      min={bet.minCoins}
-                      max={maxAllowedBet}
-                      className="text-lg"
-                    />
-                  </FormControl>
+                  <div className="flex items-center space-x-2">
+                    <FormControl>
+                      <Input
+                        type="number"
+                        {...field}
+                        onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : "")}
+                        min={bet.minCoins}
+                        max={maxAllowedBet}
+                        className="text-lg"
+                      />
+                    </FormControl>
+                    <Button type="button" onClick={() => form.setValue("coinsAmount", maxAllowedBet)} className="whitespace-nowrap">
+                      All-in
+                    </Button>
+                  </div>
                   <FormMessage />
                   <p className="text-muted-foreground mt-1 text-sm">{`Min: ${bet.minCoins} A.c. | Max: ${maxAllowedBet} A.c.`}</p>
                 </FormItem>
