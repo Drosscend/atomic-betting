@@ -51,32 +51,32 @@ export default function WelcomePage() {
   };
 
   return (
-    <div className="min-h-screen py-12">
+    <div className="bg-background min-h-screen py-12">
       <div className="container mx-auto max-w-4xl px-4">
-        <h1 className="mb-8 text-center text-5xl font-extrabold tracking-tight text-red-900 lg:text-6xl">
-          Bienvenue sur <span className="bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">Atomic Betting</span> !
+        <h1 className="text-primary mb-8 text-center text-5xl font-extrabold tracking-tight lg:text-6xl">
+          Bienvenue sur <span className="from-primary to-primary-foreground bg-gradient-to-r bg-clip-text text-transparent">Atomic Betting</span> !
         </h1>
 
         <Card className="mb-8 overflow-hidden shadow-lg">
-          <CardHeader className="bg-gradient-to-r from-red-500 to-red-700 text-white">
+          <CardHeader className="bg-primary text-primary-foreground">
             <CardTitle className="text-2xl">{`Prêt à commencer votre aventure ?`}</CardTitle>
-            <CardDescription className="text-red-100">{`Suivez ces étapes simples pour débuter avec Atomic Betting`}</CardDescription>
+            <CardDescription className="text-primary-foreground/80">{`Suivez ces étapes simples pour débuter avec Atomic Betting`}</CardDescription>
           </CardHeader>
           <CardContent className="p-6">
             <div className="space-y-6">
               {steps.map((step, index) => (
                 <div
                   key={index}
-                  className={`flex items-start space-x-4 ${index === currentStep ? "text-red-700" : "text-gray-600"} ${index <= currentStep ? "cursor-pointer hover:text-red-600" : ""}`}
+                  className={`flex items-start space-x-4 ${index === currentStep ? "text-primary" : "text-muted-foreground"} ${index <= currentStep ? "hover:text-primary cursor-pointer" : ""}`}
                   onClick={() => index <= currentStep && handleStepClick(index)}
                 >
-                  <div className={`rounded-full p-2 ${index === currentStep ? "bg-red-100" : "bg-gray-100"}`}>
+                  <div className={`rounded-full p-2 ${index === currentStep ? "bg-primary/20" : "bg-muted"}`}>
                     <step.icon className="size-6" />
                   </div>
                   <div>
                     <p className="font-medium">{step.title}</p>
                     <p className="text-sm">{step.description}</p>
-                    {index === currentStep && <p className="mt-2 rounded-md bg-red-50 p-3 text-sm text-gray-600">{step.detailedDescription}</p>}
+                    {index === currentStep && <p className="bg-muted text-foreground mt-2 rounded-md p-3 text-sm">{step.detailedDescription}</p>}
                   </div>
                 </div>
               ))}
@@ -87,33 +87,33 @@ export default function WelcomePage() {
         <Card className="mb-8 overflow-hidden shadow-lg">
           <CardContent className="p-6">
             <div className="mb-4 flex items-center justify-between">
-              <span className="text-lg font-semibold text-red-700">{`Votre progression`}</span>
-              <span className="text-sm font-medium text-gray-600">{`Étape ${currentStep + 1} sur ${steps.length}`}</span>
+              <span className="text-primary text-lg font-semibold">{`Votre progression`}</span>
+              <span className="text-muted-foreground text-sm font-medium">{`Étape ${currentStep + 1} sur ${steps.length}`}</span>
             </div>
             <div className="relative pt-1">
               <div className="mb-2 flex items-center justify-between">
                 <div>
-                  <span className="inline-block rounded-full bg-red-200 px-2 py-1 text-xs font-semibold uppercase text-red-600">{`En cours`}</span>
+                  <span className="bg-primary/20 text-primary inline-block rounded-full px-2 py-1 text-xs font-semibold uppercase">{`En cours`}</span>
                 </div>
                 <div className="text-right">
-                  <span className="inline-block text-xs font-semibold text-red-600">{`${Math.round(((currentStep + 1) / steps.length) * 100)}%`}</span>
+                  <span className="text-primary inline-block text-xs font-semibold">{`${Math.round(((currentStep + 1) / steps.length) * 100)}%`}</span>
                 </div>
               </div>
-              <Progress value={((currentStep + 1) / steps.length) * 100} className="h-2 w-full bg-red-200" />
+              <Progress value={((currentStep + 1) / steps.length) * 100} className="bg-secondary h-2 w-full" />
             </div>
           </CardContent>
         </Card>
 
         <div className="mb-8 flex items-center justify-between">
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             {`Besoin d'aide ? Consultez notre `}
-            <a href="/faq" className="font-medium text-red-600 hover:underline">
+            <a href="/faq" className="text-primary font-medium hover:underline">
               {`FAQ`}
             </a>
           </p>
           <Button
             onClick={handleNextStep}
-            className="rounded-full bg-gradient-to-r from-red-500 to-red-700 px-6 py-2 text-white transition duration-300 hover:shadow-lg"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-6 py-2 transition duration-300"
           >
             {currentStep === steps.length - 1 ? `C'est parti !` : `Étape suivante`}
             <ArrowRightIcon className="ml-2 size-4" />
@@ -121,14 +121,14 @@ export default function WelcomePage() {
         </div>
 
         <Card className="mb-8 overflow-hidden shadow-lg">
-          <CardHeader className="bg-gradient-to-r from-red-500 to-red-700 text-white">
+          <CardHeader className="bg-primary text-primary-foreground">
             <CardTitle className="flex items-center">
               <RocketIcon className="mr-2 size-6" />
               {`Le saviez-vous ?`}
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6">
-            <p className="italic text-gray-600">
+            <p className="text-foreground italic">
               {`Atomic Betting a été créé par des étudiants qui cherchaient à pimenter leurs cours moins passionnants. Aujourd'hui, c'est une plateforme qui rassemble des milliers de parieurs virtuels !`}
             </p>
           </CardContent>

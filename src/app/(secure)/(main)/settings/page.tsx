@@ -1,5 +1,5 @@
 import { DeleteAccountForm } from "@/app/(secure)/(main)/settings/_components/delete-account-form";
-import { UpdateUsernameForm } from "@/app/(secure)/(main)/settings/_components/update-username-form";
+import { UpdateUserProfileForm } from "@/app/(secure)/(main)/settings/_components/update-user-profile-form";
 import { UserSessions } from "@/app/(secure)/(main)/settings/_components/user-sessions";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
@@ -20,7 +20,7 @@ export default async function Page() {
     <div className="container mx-auto p-4">
       <h1 className="mb-6 text-3xl font-bold">{`Paramètres`}</h1>
       <div className="space-y-6">
-        <UpdateUsernameForm user={user} />
+        <UpdateUserProfileForm user={user} />
         <UserSessions sessions={user?.sessions || []} currentSessionId={session.id} />
         <DeleteAccountForm />
       </div>

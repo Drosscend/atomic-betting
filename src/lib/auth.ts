@@ -34,12 +34,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
       });
 
-      // Add memberships and roles to the session
+      // Fetch user's biography
+      const userWithBiography = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { biography: true },
+      });
+
+      // Add memberships, roles, and biography to the session
       return {
         ...session,
         user: {
           ...session.user,
           id: user.id,
+          biography: userWithBiography?.biography || null,
           teams: teams.map((team) => ({
             teamId: team.id,
             teamName: team.name,

@@ -5,6 +5,7 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      biography?: string | null;
       teams: {
         teamId: string;
         teamName: string;
@@ -20,6 +21,7 @@ declare module "next-auth" {
 
   interface User {
     id: string;
+    biography?: string | null;
     teams: {
       teamId: string;
       teamName: string;

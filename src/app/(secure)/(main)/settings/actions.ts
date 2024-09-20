@@ -1,29 +1,31 @@
 "use server";
 
-import { deleteAccountSchema, deleteSessionSchema, updateUsernameSchema } from "@/validations/user-settings.schema";
+import { deleteAccountSchema, deleteSessionSchema, updateUserProfileSchema } from "@/validations/user-settings.schema";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/database/db";
 import { authActionClient } from "@/lib/safe-action";
 
-export const updateUsername = authActionClient.schema(updateUsernameSchema).action(async ({ parsedInput: { username }, ctx: { user } }) => {
-  try {
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { name: username },
-    });
-    revalidatePath("/", "layout");
-    return {
-      success: true,
-      message: `Votre nom d'utilisateur a été mis à jour avec succès.`,
-    };
-  } catch (error) {
-    console.error("Erreur lors de la mise à jour du nom d'utilisateur:", error);
-    return {
-      success: false,
-      message: `Une erreur est survenue lors de la mise à jour de votre nom d'utilisateur.`,
-    };
-  }
-});
+export const updateUserProfile = authActionClient
+  .schema(updateUserProfileSchema)
+  .action(async ({ parsedInput: { username, biography }, ctx: { user } }) => {
+    try {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { name: username, biography },
+      });
+      revalidatePath("/", "layout");
+      return {
+        success: true,
+        message: `Votre profil a été mis à jour avec succès.`,
+      };
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour du profil utilisateur:", error);
+      return {
+        success: false,
+        message: `Une erreur est survenue lors de la mise à jour de votre profil.`,
+      };
+    }
+  });
 
 export const deleteAccount = authActionClient.schema(deleteAccountSchema).action(async ({ ctx: { user } }) => {
   try {
