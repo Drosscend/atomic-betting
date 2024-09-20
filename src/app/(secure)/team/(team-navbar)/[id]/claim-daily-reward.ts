@@ -15,6 +15,9 @@ export const claimDailyReward = authActionClient.schema(dailyRewardSchema).actio
           teamId: parsedInput.teamId,
         },
       },
+      include: {
+        team: true,
+      },
     });
 
     if (!teamMembership) {
@@ -34,13 +37,13 @@ export const claimDailyReward = authActionClient.schema(dailyRewardSchema).actio
       };
     }
 
-    let rewardAmount = 10;
+    let rewardAmount = teamMembership.team.dailyRewardCoins;
     let newConsecutiveDays = 1;
 
     if (lastReward && isSameDay(addDays(lastReward, 1), now)) {
       newConsecutiveDays = teamMembership.consecutiveDays + 1;
       if (newConsecutiveDays === 7) {
-        rewardAmount += 50;
+        rewardAmount += teamMembership.team.streakRewardCoins;
         newConsecutiveDays = 0;
       }
     }

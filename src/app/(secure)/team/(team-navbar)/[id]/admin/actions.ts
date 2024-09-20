@@ -12,7 +12,7 @@ export const updateTeamSettings = authActionClient
   .schema(async (prevSchema) => {
     return prevSchema.extend({ teamId: z.string() });
   })
-  .action(async ({ parsedInput: { teamName, defaultCoins, defaultDuration, teamId }, ctx: { user } }) => {
+  .action(async ({ parsedInput: { teamName, defaultCoins, defaultDuration, dailyRewardCoins, streakRewardCoins, teamId }, ctx: { user } }) => {
     try {
       const team = await prisma.team.findUnique({
         where: { id: teamId },
@@ -40,6 +40,8 @@ export const updateTeamSettings = authActionClient
           name: teamName,
           defaultCoins,
           defaultHoursBet: defaultDuration,
+          dailyRewardCoins,
+          streakRewardCoins,
         },
       });
       revalidatePath(`/team`, "layout");

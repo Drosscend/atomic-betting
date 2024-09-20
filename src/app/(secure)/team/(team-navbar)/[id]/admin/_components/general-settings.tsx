@@ -19,6 +19,8 @@ export function GeneralSettings({ team }: { team: TeamWithMemberships }) {
       teamName: team.name,
       defaultCoins: team.defaultCoins,
       defaultDuration: team.defaultHoursBet,
+      dailyRewardCoins: team.dailyRewardCoins,
+      streakRewardCoins: team.streakRewardCoins,
     },
   });
 
@@ -42,8 +44,8 @@ export function GeneralSettings({ team }: { team: TeamWithMemberships }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{"Paramètres généraux"}</CardTitle>
-        <CardDescription>{"Gérez les paramètres de base de votre équipe"}</CardDescription>
+        <CardTitle>{`Paramètres généraux`}</CardTitle>
+        <CardDescription>{`Gérez les paramètres de base de votre équipe`}</CardDescription>
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -53,7 +55,7 @@ export function GeneralSettings({ team }: { team: TeamWithMemberships }) {
               name="teamName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{"Nom de l'équipe"}</FormLabel>
+                  <FormLabel>{`Nom de l'équipe`}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -66,7 +68,7 @@ export function GeneralSettings({ team }: { team: TeamWithMemberships }) {
               name="defaultCoins"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{"Jetons par défaut"}</FormLabel>
+                  <FormLabel>{`Jetons par défaut`}</FormLabel>
                   <FormControl>
                     <Input type="number" {...field} onChange={(e) => field.onChange(parseInt(e.target.value))} />
                   </FormControl>
@@ -79,7 +81,33 @@ export function GeneralSettings({ team }: { team: TeamWithMemberships }) {
               name="defaultDuration"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Durée par défaut des paris (heures)</FormLabel>
+                  <FormLabel>{`Durée par défaut des paris (heures)`}</FormLabel>
+                  <FormControl>
+                    <Input type="number" {...field} onChange={(e) => field.onChange(parseInt(e.target.value))} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="dailyRewardCoins"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{`Jetons pour la récompense quotidienne`}</FormLabel>
+                  <FormControl>
+                    <Input type="number" {...field} onChange={(e) => field.onChange(parseInt(e.target.value))} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="streakRewardCoins"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{`Jetons pour la récompense de série`}</FormLabel>
                   <FormControl>
                     <Input type="number" {...field} onChange={(e) => field.onChange(parseInt(e.target.value))} />
                   </FormControl>
@@ -90,7 +118,7 @@ export function GeneralSettings({ team }: { team: TeamWithMemberships }) {
           </CardContent>
           <CardFooter>
             <Button type="submit" disabled={updateStatus === "executing"}>
-              {updateStatus === "executing" ? "Enregistrement..." : "Enregistrer"}
+              {updateStatus === "executing" ? `Enregistrement...` : `Enregistrer`}
             </Button>
           </CardFooter>
         </form>

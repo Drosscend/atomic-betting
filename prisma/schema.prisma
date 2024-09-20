@@ -63,14 +63,16 @@ model VerificationToken {
 }
 
 model Team {
-  id              String           @id @default(uuid())
-  name            String
-  defaultCoins    Int              @default(300)
-  defaultHoursBet Int              @default(1)
-  creatorId       String
-  creator         User             @relation("TeamCreator", fields: [creatorId], references: [id])
-  memberships     TeamMembership[]
-  bets            Bet[]
+  id                String           @id @default(uuid())
+  name              String
+  defaultCoins      Int              @default(300)
+  defaultHoursBet   Int              @default(1)
+  dailyRewardCoins  Int              @default(10)
+  streakRewardCoins Int              @default(50)
+  creatorId         String
+  creator           User             @relation("TeamCreator", fields: [creatorId], references: [id])
+  memberships       TeamMembership[]
+  bets              Bet[]
 
   @@map("teams")
 }

@@ -7,6 +7,8 @@ export const updateTeamSettingsSchema = z.object({
     .max(50, { message: `Le nom de l'équipe ne peut pas dépasser 50 caractères.` }),
   defaultCoins: z.number().int().min(0, { message: `Le nombre de jetons par défaut doit être positif ou nul.` }),
   defaultDuration: z.number().int().min(1, { message: `La durée par défaut des paris doit être d'au moins 1 heure.` }),
+  dailyRewardCoins: z.number().int().min(1, { message: `Le nombre de jetons pour la récompense quotidienne doit être d'au moins 1.` }),
+  streakRewardCoins: z.number().int().min(1, { message: `Le nombre de jetons pour la récompense de série doit être d'au moins 1.` }),
 });
 
 export const deleteTeamSchema = z.object({
