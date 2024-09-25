@@ -1,3 +1,5 @@
+"use client";
+
 import { differenceInSeconds, format, isAfter, isBefore, isEqual } from "date-fns";
 import { fr } from "date-fns/locale";
 import { CheckCircleIcon } from "lucide-react";

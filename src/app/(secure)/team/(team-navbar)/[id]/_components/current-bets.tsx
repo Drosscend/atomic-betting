@@ -1,3 +1,5 @@
+"use client";
+
 import { differenceInSeconds, format } from "date-fns";
 import { fr } from "date-fns/locale";
 import Link from "next/link";
