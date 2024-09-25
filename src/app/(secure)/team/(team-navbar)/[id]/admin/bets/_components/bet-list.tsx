@@ -1,5 +1,3 @@
-"use client";
-
 import { differenceInSeconds, format, isAfter, isBefore, isEqual } from "date-fns";
 import { fr } from "date-fns/locale";
 import { CheckCircleIcon } from "lucide-react";
@@ -26,7 +24,7 @@ export function BetsList({ bets, teamId }: BetsListProps) {
   const completedBets = bets.filter((bet) => isBefore(bet.endDateTime, now) && !isEqual(bet.endDateTime, now));
 
   const renderBetCard = (bet: BetWithTransactions, isActive: boolean = false) => {
-    const totalBetAmount = bet.transactions.reduce((sum, t) => sum + t.coinsAmount, 0);
+    const totalBetAmount = Math.abs(bet.transactions.reduce((sum, t) => sum + t.coinsAmount, 0));
 
     const now = new Date();
     const totalDuration = differenceInSeconds(bet.endDateTime, bet.startDateTime);
