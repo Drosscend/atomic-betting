@@ -23,7 +23,7 @@ export default async function AdminPage({ params }: { params: { id: string } }) 
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">{"Paramètres de l'équipe"}</h1>
-      <GeneralSettings team={team} />
+      <GeneralSettings team={team} isAdmin={isAdmin} />
       <InviteLinkComponent teamId={team.id} />
       <RoleManagement team={team} isAdmin={isAdmin} />
       <DangerZone teamId={team.id} isAdmin={isAdmin} />

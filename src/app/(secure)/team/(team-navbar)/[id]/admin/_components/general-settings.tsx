@@ -12,7 +12,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import type { TeamWithMemberships } from "@/lib/database/team";
 
-export function GeneralSettings({ team }: { team: TeamWithMemberships }) {
+interface GeneralSettingsProps {
+  team: TeamWithMemberships;
+  isAdmin: boolean;
+}
+
+export function GeneralSettings({ team, isAdmin }: GeneralSettingsProps) {
   const form = useForm<UpdateTeamSettingsInput>({
     resolver: zodResolver(updateTeamSettingsSchema),
     defaultValues: {
@@ -57,7 +62,7 @@ export function GeneralSettings({ team }: { team: TeamWithMemberships }) {
                 <FormItem>
                   <FormLabel>{`Nom de l'équipe`}</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} disabled={!isAdmin} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -70,7 +75,7 @@ export function GeneralSettings({ team }: { team: TeamWithMemberships }) {
                 <FormItem>
                   <FormLabel>{`Jetons par défaut`}</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} onChange={(e) => field.onChange(parseInt(e.target.value))} />
+                    <Input type="number" {...field} onChange={(e) => field.onChange(parseInt(e.target.value))} disabled={!isAdmin} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -96,7 +101,7 @@ export function GeneralSettings({ team }: { team: TeamWithMemberships }) {
                 <FormItem>
                   <FormLabel>{`Jetons pour la récompense quotidienne`}</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} onChange={(e) => field.onChange(parseInt(e.target.value))} />
+                    <Input type="number" {...field} onChange={(e) => field.onChange(parseInt(e.target.value))} disabled={!isAdmin} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -109,7 +114,7 @@ export function GeneralSettings({ team }: { team: TeamWithMemberships }) {
                 <FormItem>
                   <FormLabel>{`Jetons pour la récompense de série`}</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} onChange={(e) => field.onChange(parseInt(e.target.value))} />
+                    <Input type="number" {...field} onChange={(e) => field.onChange(parseInt(e.target.value))} disabled={!isAdmin} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

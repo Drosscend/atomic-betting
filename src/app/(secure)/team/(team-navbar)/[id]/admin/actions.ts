@@ -34,6 +34,21 @@ export const updateTeamSettings = authActionClient
         };
       }
 
+      // the manager can only update the default duration
+      if (membership.role === "MANAGER") {
+        await prisma.team.update({
+          where: { id: teamId },
+          data: {
+            defaultHoursBet: defaultDuration,
+          },
+        });
+        revalidatePath(`/team`, "layout");
+        return {
+          success: true,
+          message: `Les paramètres de l'équipe ont été mis à jour avec succès.`,
+        };
+      }
+
       await prisma.team.update({
         where: { id: teamId },
         data: {
