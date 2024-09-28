@@ -27,7 +27,7 @@ export const createTeam = authActionClient.schema(createTeamSchema).action(async
       },
     });
 
-    revalidatePath(`/`, "layout");
+    revalidatePath(`/team`, "layout");
 
     return {
       success: true,

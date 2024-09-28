@@ -80,7 +80,7 @@ export const deleteSession = authActionClient.schema(deleteSessionSchema).action
       where: { id: sessionId },
     });
 
-    revalidatePath("/settings");
+    revalidatePath("/", "layout");
     return {
       success: true,
       message: `La session a été supprimée avec succès.`,

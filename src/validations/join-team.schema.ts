@@ -3,7 +3,7 @@ import { z } from "zod";
 export const invitationSchema = z.object({
   invitation: z
     .string()
-    .min(1, { message: `Le champ ne peut pas être vide.` })
+    .min(1, { message: `Le champ d'invitation ne peut pas être vide.` })
     .refine(
       (value) => {
         const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;

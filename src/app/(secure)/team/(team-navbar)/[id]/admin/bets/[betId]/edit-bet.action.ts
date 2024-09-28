@@ -53,7 +53,7 @@ export const editBet = authActionClient.schema(editBetSchema).action(async ({ pa
       }
     });
 
-    revalidatePath(`/team/${existingBet.teamId}/bets`);
+    revalidatePath(`/team/${existingBet.teamId}`);
     return {
       success: true,
       message: `Le pari a été modifié avec succès.`,

@@ -50,7 +50,7 @@ export const createBet = authActionClient.schema(createBetSchema).action(async (
       },
     });
 
-    revalidatePath(`/team/${teamId}/bets`);
+    revalidatePath(`/team/${teamId}`);
     return {
       success: true,
       message: `Le pari a été créé avec succès.`,
