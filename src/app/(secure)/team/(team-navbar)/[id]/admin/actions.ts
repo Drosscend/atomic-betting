@@ -116,13 +116,6 @@ export const deleteTeam = authActionClient
     }
   });
 
-export const getInviteLink = authActionClient.schema(z.string()).action(async ({ parsedInput: teamId }) => {
-  return {
-    success: true,
-    inviteLink: `${process.env.NEXT_PUBLIC_APP_URL}/invite/${teamId}`,
-  };
-});
-
 export const updateUserRole = authActionClient
   .schema(updateUserRoleSchema)
   .action(async ({ parsedInput: { userId, role, teamId }, ctx: { user } }) => {

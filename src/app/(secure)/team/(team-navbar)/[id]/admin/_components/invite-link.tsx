@@ -1,33 +1,15 @@
 "use client";
 
-import { getInviteLink } from "@/app/(secure)/team/(team-navbar)/[id]/admin/actions";
 import { CopyIcon, LinkIcon } from "lucide-react";
 import { toast } from "sonner";
-import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 
 export function InviteLinkComponent({ teamId }: { teamId: string }) {
-  const [inviteLink, setInviteLink] = useState("");
+  const inviteLink = `${process.env.NEXT_PUBLIC_APP_URL}/invite/${teamId}`;
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const { execute: executeGetInviteLink, status } = useAction(getInviteLink, {
-    onSuccess: (result) => {
-      if (result.data && result.data.success) {
-        setInviteLink(result.data.inviteLink);
-        setIsDialogOpen(true);
-      }
-    },
-    onError: ({ error }) => {
-      toast.error(`Une erreur est survenue : ${error.serverError || "Erreur inconnue"}`);
-    },
-  });
-
-  const handleGetInviteLink = () => {
-    executeGetInviteLink(teamId);
-  };
 
   const handleCopyLink = async () => {
     try {
@@ -42,9 +24,9 @@ export function InviteLinkComponent({ teamId }: { teamId: string }) {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-full" onClick={handleGetInviteLink} disabled={status === "executing"}>
+        <Button variant="outline" className="w-full">
           <LinkIcon className="mr-2 size-4" />
-          {status === "executing" ? "Chargement..." : "Obtenir le lien d'invitation"}
+          {"Obtenir le lien d'invitation"}
         </Button>
       </DialogTrigger>
       <DialogContent>
