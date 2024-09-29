@@ -11,12 +11,10 @@ describe("calculateOdds", () => {
       { betOptionId: "A", coinsAmount: -50 },
     ];
     const result = calculateOdds(transactions, allOptions);
-    expect(result).toEqual({
-      A: 2.33,
-      B: 1.75,
-      C: 10,
-      D: 10,
-    });
+    expect(result.A).toBeCloseTo(2.33, 2);
+    expect(result.B).toBeCloseTo(1.75, 2);
+    expect(result.C).toBe(4);
+    expect(result.D).toBe(4);
   });
 
   it("should handle single option correctly", () => {
@@ -26,31 +24,20 @@ describe("calculateOdds", () => {
     ];
     const result = calculateOdds(transactions, allOptions);
     expect(result).toEqual({
-      A: 1.01,
-      B: 10,
-      C: 10,
-      D: 10,
+      A: 1,
+      B: 4,
+      C: 4,
+      D: 4,
     });
   });
 
-  it("should return default odds for empty transactions", () => {
+  it("should return equal odds for empty transactions", () => {
     const result = calculateOdds([], allOptions);
     expect(result).toEqual({
-      A: 10,
-      B: 10,
-      C: 10,
-      D: 10,
-    });
-  });
-
-  it("should handle custom default odds", () => {
-    const transactions: TransactionWithOption[] = [{ betOptionId: "A", coinsAmount: -100 }];
-    const result = calculateOdds(transactions, allOptions, 1.01, 15);
-    expect(result).toEqual({
-      A: 1.01,
-      B: 15,
-      C: 15,
-      D: 15,
+      A: 4,
+      B: 4,
+      C: 4,
+      D: 4,
     });
   });
 
@@ -63,7 +50,7 @@ describe("calculateOdds", () => {
       }));
     const result = calculateOdds(transactions, allOptions);
     expect(Object.keys(result).length).toBe(4);
-    Object.values(result).forEach((odd) => expect(odd).toBeGreaterThanOrEqual(1.01));
+    Object.values(result).forEach((odd) => expect(odd).toBeGreaterThan(0));
   });
 
   it("should handle fractional coin amounts", () => {
@@ -72,8 +59,10 @@ describe("calculateOdds", () => {
       { betOptionId: "B", coinsAmount: -199.5 },
     ];
     const result = calculateOdds(transactions, allOptions);
-    expect(result.A).toBeCloseTo(3, 1);
-    expect(result.B).toBeCloseTo(1.5, 1);
+    expect(result.A).toBeCloseTo(2.99, 2);
+    expect(result.B).toBeCloseTo(1.5, 2);
+    expect(result.C).toBe(4);
+    expect(result.D).toBe(4);
   });
 
   it("should handle zero coin amounts", () => {
@@ -82,11 +71,13 @@ describe("calculateOdds", () => {
       { betOptionId: "B", coinsAmount: -100 },
     ];
     const result = calculateOdds(transactions, allOptions);
-    expect(result.A).toBe(10);
-    expect(result.B).toBe(1.01);
+    expect(result.A).toBe(4);
+    expect(result.B).toBe(1);
+    expect(result.C).toBe(4);
+    expect(result.D).toBe(4);
   });
 
-  it("should handle positive coin amounts", () => {
+  it("should handle absolute values of coin amounts", () => {
     const transactions: TransactionWithOption[] = [
       { betOptionId: "A", coinsAmount: 100 },
       { betOptionId: "B", coinsAmount: -100 },
@@ -94,5 +85,7 @@ describe("calculateOdds", () => {
     const result = calculateOdds(transactions, allOptions);
     expect(result.A).toBe(2);
     expect(result.B).toBe(2);
+    expect(result.C).toBe(4);
+    expect(result.D).toBe(4);
   });
 });

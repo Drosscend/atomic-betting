@@ -67,7 +67,7 @@ export function BetForm({ bet, userSelectedOption, userTransactions, userCoins }
       betOptionId: t.betOptionId!,
       coinsAmount: t.coinsAmount,
     }));
-  const odds = calculateOdds(transactions, allOptions, 1.01, 10.0);
+  const odds = calculateOdds(transactions, allOptions);
 
   const totalCoins = bet.transactions.reduce((sum, t) => sum + Math.abs(t.coinsAmount), 0);
   const optionStats = bet.questionBet?.options.reduce(

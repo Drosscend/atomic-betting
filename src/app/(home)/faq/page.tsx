@@ -39,23 +39,23 @@ export default function FAQPage() {
             <ol className="mt-2 list-decimal pl-5">
               <li>{`Toutes les mises (en Atomic Credits) pour chaque option sont additionnées.`}</li>
               <li>{`La probabilité de chaque option est calculée en divisant le total des mises sur cette option par le total de toutes les mises.`}</li>
-              <li>{`La cote est l'inverse de cette probabilité, avec un minimum fixé à 1.01 pour éviter les cotes trop basses.`}</li>
-              <li>{`Si aucun pari n'a été placé, une cote par défaut (généralement 10.0) est attribuée à toutes les options.`}</li>
+              <li>{`La cote est l'inverse de cette probabilité.`}</li>
+              <li>{`Si aucun pari n'a été placé, des cotes égales sont attribuées à toutes les options, basées sur le nombre d'options disponibles.`}</li>
             </ol>
             <p className="mt-2">{`Ce système assure que les cotes reflètent l'opinion collective des parieurs et s'ajustent en temps réel à mesure que de nouveaux paris sont placés.`}</p>
           </AccordionContent>
         </AccordionItem>
 
         <AccordionItem value="payout-calculation">
-          <AccordionTrigger>{`Comment sont calculés les gains potentiels ?`}</AccordionTrigger>
+          <AccordionTrigger>{`Comment sont calculés les gains ?`}</AccordionTrigger>
           <AccordionContent>
-            <p>{`Les gains potentiels sont calculés au moment où vous placez votre pari. Voici comment cela fonctionne :`}</p>
+            <p>{`Les gains sont calculés au moment où le pari est clôturé et que le résultat est annoncé. Voici comment cela fonctionne :`}</p>
             <ol className="mt-2 list-decimal pl-5">
-              <li>{`Lorsque vous placez un pari, la cote actuelle pour l'option choisie est enregistrée avec votre transaction.`}</li>
-              <li>{`Vos gains potentiels sont calculés en multipliant votre mise par cette cote.`}</li>
-              <li>{`Si votre pari est gagnant, vous recevrez ce montant en Atomic Credits.`}</li>
+              <li>{`Lorsque le résultat du pari est annoncé, les cotes finales sont calculées en tenant compte de toutes les mises placées.`}</li>
+              <li>{`Pour chaque pari gagnant, les gains sont calculés en multipliant la mise par la cote finale de l'option gagnante.`}</li>
+              <li>{`Les Atomic Credits gagnés sont ensuite distribués aux parieurs ayant choisi l'option gagnante.`}</li>
             </ol>
-            <p className="mt-2">{`Il est important de noter que même si les cotes continuent de fluctuer après que vous ayez placé votre pari, vos gains potentiels restent basés sur la cote au moment de votre mise.`}</p>
+            <p className="mt-2">{`Il est important de noter que les gains sont basés sur les cotes finales au moment de la clôture du pari, et non sur les cotes au moment où vous avez placé votre mise. Cela signifie que vos gains potentiels peuvent fluctuer jusqu'à la fin du pari.`}</p>
           </AccordionContent>
         </AccordionItem>
 

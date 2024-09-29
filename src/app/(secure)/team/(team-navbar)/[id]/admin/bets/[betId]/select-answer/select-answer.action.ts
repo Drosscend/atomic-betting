@@ -4,6 +4,7 @@ import { SelectAnswerInput } from "@/validations/bet.schema";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/database/db";
+import { calculateOdds } from "@/lib/odds.utils";
 import { authActionClient } from "@/lib/safe-action";
 
 export const selectAnswer = authActionClient.schema(SelectAnswerInput).action(async ({ parsedInput, ctx: { user } }) => {
@@ -32,6 +33,11 @@ export const selectAnswer = authActionClient.schema(SelectAnswerInput).action(as
       return { success: false, message: `Une réponse a déjà été sélectionnée pour ce pari.` };
     }
 
+    const finalOdds = calculateOdds(
+      bet.transactions.map((t) => ({ betOptionId: t.betOptionId!, coinsAmount: t.coinsAmount })),
+      bet.questionBet!.options.map((o) => o.id)
+    );
+
     const winningTransactions = bet.transactions.filter((t) => t.betOptionId === optionId);
     const totalBetAmount = bet.transactions.reduce((sum, t) => sum + Math.abs(t.coinsAmount), 0);
     const winningBetAmount = winningTransactions.reduce((sum, t) => sum + Math.abs(t.coinsAmount), 0);
@@ -44,12 +50,13 @@ export const selectAnswer = authActionClient.schema(SelectAnswerInput).action(as
     ];
 
     winningTransactions.forEach((transaction) => {
-      if (transaction.odds === null) {
-        console.error(`Transaction ${transaction.id} n'a pas de cote enregistrée.`);
+      const finalOdd = finalOdds[transaction.betOptionId!];
+      if (finalOdd === undefined) {
+        console.error(`Cote finale non trouvée pour l'option ${transaction.betOptionId}.`);
         return;
       }
 
-      const winnings = Math.floor(Math.abs(transaction.coinsAmount) * transaction.odds);
+      const winnings = Math.floor(Math.abs(transaction.coinsAmount) * finalOdd);
 
       transactionOperations.push(
         prisma.teamMembership.update({
@@ -65,7 +72,7 @@ export const selectAnswer = authActionClient.schema(SelectAnswerInput).action(as
             teamMembershipId: transaction.teamMembershipId,
             coinsAmount: winnings,
             betOptionId: optionId,
-            odds: transaction.odds,
+            odds: finalOdd,
             transactionType: "WINNINGS",
           },
         })
