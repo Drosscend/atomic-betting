@@ -8,7 +8,11 @@ export type UserFull = Prisma.UserGetPayload<{
   include: {
     sessions: true;
     accounts: true;
-    teamMemberships: true;
+    teamMemberships: {
+      include: {
+        team: true;
+      };
+    };
     createdTeams: true;
   };
 }>;
@@ -31,7 +35,11 @@ export const getUserById = cache(async (userId: string): Promise<UserFull> => {
     include: {
       sessions: true,
       accounts: true,
-      teamMemberships: true,
+      teamMemberships: {
+        include: {
+          team: true,
+        },
+      },
       createdTeams: true,
     },
   });

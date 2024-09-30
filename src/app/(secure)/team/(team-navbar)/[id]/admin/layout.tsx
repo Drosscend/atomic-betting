@@ -1,5 +1,5 @@
-import { SideNav } from "@/app/(secure)/team/(team-navbar)/[id]/admin/side-nav";
 import type { ReactNode } from "react";
+import { SideNav } from "@/components/side-nav";
 
 interface AdminLayoutProps {
   children: ReactNode;
