@@ -1,3 +1,4 @@
+import { UserPendingTeams } from "@/app/(secure)/(main)/settings/teams/_components/user-pending-teams";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
@@ -18,6 +19,8 @@ export default async function TeamsPage() {
     <div className="container mx-auto p-4">
       <h1 className="mb-6 text-3xl font-bold">{`Mes équipes`}</h1>
       <UserTeams user={user} />
+      <h2 className="mb-4 mt-8 text-2xl font-bold">{`Demandes d'adhésion en attente`}</h2>
+      <UserPendingTeams user={user} />
     </div>
   );
 }
